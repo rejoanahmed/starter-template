@@ -1,0 +1,13 @@
+{
+  "extends": "@starter/config/react-library.json",
+  "compilerOptions": {
+    "outDir": "dist",
+    "baseUrl": ".",
+    "paths": {
+      "@starter/ui/*": ["./src/*"]
+    },
+    "strictNullChecks": true
+  },
+  "include": ["src"],
+  "exclude": ["node_modules", "dist"]
+}
