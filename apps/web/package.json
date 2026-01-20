@@ -84,7 +84,8 @@
     "tailwindcss": "^4.0.6",
     "vaul": "^1.1.2",
     "vite-tsconfig-paths": "^5.1.4",
-    "zod": "^4.3.5"
+    "zod": "^4.3.5",
+    "@starter/ui": "workspace:*"
   },
   "devDependencies": {
     "@playwright/test": "^1.57.0",

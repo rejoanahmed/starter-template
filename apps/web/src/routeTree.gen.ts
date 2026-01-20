@@ -9,299 +9,38 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as WishlistsRouteImport } from './routes/wishlists'
-import { Route as TermsRouteImport } from './routes/terms'
-import { Route as PrivacyRouteImport } from './routes/privacy'
-import { Route as PaymentsTermsRouteImport } from './routes/payments-terms'
-import { Route as NondiscriminationRouteImport } from './routes/nondiscrimination'
-import { Route as LoginRouteImport } from './routes/login'
-import { Route as AccountRouteImport } from './routes/account'
-import { Route as HostRouteRouteImport } from './routes/host/route'
 import { Route as IndexRouteImport } from './routes/index'
-import { Route as RoomsIdRouteImport } from './routes/rooms/$id'
-import { Route as HostTodayRouteImport } from './routes/host/today'
-import { Route as HostMessagesRouteImport } from './routes/host/messages'
-import { Route as HostListingsRouteImport } from './routes/host/listings'
-import { Route as HostCreateListingRouteImport } from './routes/host/create-listing'
-import { Route as HostCalendarRouteImport } from './routes/host/calendar'
-import { Route as HostAccountRouteImport } from './routes/host/account'
-import { Route as HostListingsIdEditRouteImport } from './routes/host/listings.$id.edit'
 
-const WishlistsRoute = WishlistsRouteImport.update({
-  id: '/wishlists',
-  path: '/wishlists',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const TermsRoute = TermsRouteImport.update({
-  id: '/terms',
-  path: '/terms',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const PrivacyRoute = PrivacyRouteImport.update({
-  id: '/privacy',
-  path: '/privacy',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const PaymentsTermsRoute = PaymentsTermsRouteImport.update({
-  id: '/payments-terms',
-  path: '/payments-terms',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const NondiscriminationRoute = NondiscriminationRouteImport.update({
-  id: '/nondiscrimination',
-  path: '/nondiscrimination',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const LoginRoute = LoginRouteImport.update({
-  id: '/login',
-  path: '/login',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const AccountRoute = AccountRouteImport.update({
-  id: '/account',
-  path: '/account',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const HostRouteRoute = HostRouteRouteImport.update({
-  id: '/host',
-  path: '/host',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
-const RoomsIdRoute = RoomsIdRouteImport.update({
-  id: '/rooms/$id',
-  path: '/rooms/$id',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const HostTodayRoute = HostTodayRouteImport.update({
-  id: '/today',
-  path: '/today',
-  getParentRoute: () => HostRouteRoute,
-} as any)
-const HostMessagesRoute = HostMessagesRouteImport.update({
-  id: '/messages',
-  path: '/messages',
-  getParentRoute: () => HostRouteRoute,
-} as any)
-const HostListingsRoute = HostListingsRouteImport.update({
-  id: '/listings',
-  path: '/listings',
-  getParentRoute: () => HostRouteRoute,
-} as any)
-const HostCreateListingRoute = HostCreateListingRouteImport.update({
-  id: '/create-listing',
-  path: '/create-listing',
-  getParentRoute: () => HostRouteRoute,
-} as any)
-const HostCalendarRoute = HostCalendarRouteImport.update({
-  id: '/calendar',
-  path: '/calendar',
-  getParentRoute: () => HostRouteRoute,
-} as any)
-const HostAccountRoute = HostAccountRouteImport.update({
-  id: '/account',
-  path: '/account',
-  getParentRoute: () => HostRouteRoute,
-} as any)
-const HostListingsIdEditRoute = HostListingsIdEditRouteImport.update({
-  id: '/$id/edit',
-  path: '/$id/edit',
-  getParentRoute: () => HostListingsRoute,
-} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/host': typeof HostRouteRouteWithChildren
-  '/account': typeof AccountRoute
-  '/login': typeof LoginRoute
-  '/nondiscrimination': typeof NondiscriminationRoute
-  '/payments-terms': typeof PaymentsTermsRoute
-  '/privacy': typeof PrivacyRoute
-  '/terms': typeof TermsRoute
-  '/wishlists': typeof WishlistsRoute
-  '/host/account': typeof HostAccountRoute
-  '/host/calendar': typeof HostCalendarRoute
-  '/host/create-listing': typeof HostCreateListingRoute
-  '/host/listings': typeof HostListingsRouteWithChildren
-  '/host/messages': typeof HostMessagesRoute
-  '/host/today': typeof HostTodayRoute
-  '/rooms/$id': typeof RoomsIdRoute
-  '/host/listings/$id/edit': typeof HostListingsIdEditRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/host': typeof HostRouteRouteWithChildren
-  '/account': typeof AccountRoute
-  '/login': typeof LoginRoute
-  '/nondiscrimination': typeof NondiscriminationRoute
-  '/payments-terms': typeof PaymentsTermsRoute
-  '/privacy': typeof PrivacyRoute
-  '/terms': typeof TermsRoute
-  '/wishlists': typeof WishlistsRoute
-  '/host/account': typeof HostAccountRoute
-  '/host/calendar': typeof HostCalendarRoute
-  '/host/create-listing': typeof HostCreateListingRoute
-  '/host/listings': typeof HostListingsRouteWithChildren
-  '/host/messages': typeof HostMessagesRoute
-  '/host/today': typeof HostTodayRoute
-  '/rooms/$id': typeof RoomsIdRoute
-  '/host/listings/$id/edit': typeof HostListingsIdEditRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
-  '/host': typeof HostRouteRouteWithChildren
-  '/account': typeof AccountRoute
-  '/login': typeof LoginRoute
-  '/nondiscrimination': typeof NondiscriminationRoute
-  '/payments-terms': typeof PaymentsTermsRoute
-  '/privacy': typeof PrivacyRoute
-  '/terms': typeof TermsRoute
-  '/wishlists': typeof WishlistsRoute
-  '/host/account': typeof HostAccountRoute
-  '/host/calendar': typeof HostCalendarRoute
-  '/host/create-listing': typeof HostCreateListingRoute
-  '/host/listings': typeof HostListingsRouteWithChildren
-  '/host/messages': typeof HostMessagesRoute
-  '/host/today': typeof HostTodayRoute
-  '/rooms/$id': typeof RoomsIdRoute
-  '/host/listings/$id/edit': typeof HostListingsIdEditRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths:
-    | '/'
-    | '/host'
-    | '/account'
-    | '/login'
-    | '/nondiscrimination'
-    | '/payments-terms'
-    | '/privacy'
-    | '/terms'
-    | '/wishlists'
-    | '/host/account'
-    | '/host/calendar'
-    | '/host/create-listing'
-    | '/host/listings'
-    | '/host/messages'
-    | '/host/today'
-    | '/rooms/$id'
-    | '/host/listings/$id/edit'
+  fullPaths: '/'
   fileRoutesByTo: FileRoutesByTo
-  to:
-    | '/'
-    | '/host'
-    | '/account'
-    | '/login'
-    | '/nondiscrimination'
-    | '/payments-terms'
-    | '/privacy'
-    | '/terms'
-    | '/wishlists'
-    | '/host/account'
-    | '/host/calendar'
-    | '/host/create-listing'
-    | '/host/listings'
-    | '/host/messages'
-    | '/host/today'
-    | '/rooms/$id'
-    | '/host/listings/$id/edit'
-  id:
-    | '__root__'
-    | '/'
-    | '/host'
-    | '/account'
-    | '/login'
-    | '/nondiscrimination'
-    | '/payments-terms'
-    | '/privacy'
-    | '/terms'
-    | '/wishlists'
-    | '/host/account'
-    | '/host/calendar'
-    | '/host/create-listing'
-    | '/host/listings'
-    | '/host/messages'
-    | '/host/today'
-    | '/rooms/$id'
-    | '/host/listings/$id/edit'
+  to: '/'
+  id: '__root__' | '/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  HostRouteRoute: typeof HostRouteRouteWithChildren
-  AccountRoute: typeof AccountRoute
-  LoginRoute: typeof LoginRoute
-  NondiscriminationRoute: typeof NondiscriminationRoute
-  PaymentsTermsRoute: typeof PaymentsTermsRoute
-  PrivacyRoute: typeof PrivacyRoute
-  TermsRoute: typeof TermsRoute
-  WishlistsRoute: typeof WishlistsRoute
-  RoomsIdRoute: typeof RoomsIdRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/wishlists': {
-      id: '/wishlists'
-      path: '/wishlists'
-      fullPath: '/wishlists'
-      preLoaderRoute: typeof WishlistsRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/terms': {
-      id: '/terms'
-      path: '/terms'
-      fullPath: '/terms'
-      preLoaderRoute: typeof TermsRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/privacy': {
-      id: '/privacy'
-      path: '/privacy'
-      fullPath: '/privacy'
-      preLoaderRoute: typeof PrivacyRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/payments-terms': {
-      id: '/payments-terms'
-      path: '/payments-terms'
-      fullPath: '/payments-terms'
-      preLoaderRoute: typeof PaymentsTermsRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/nondiscrimination': {
-      id: '/nondiscrimination'
-      path: '/nondiscrimination'
-      fullPath: '/nondiscrimination'
-      preLoaderRoute: typeof NondiscriminationRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/login': {
-      id: '/login'
-      path: '/login'
-      fullPath: '/login'
-      preLoaderRoute: typeof LoginRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/account': {
-      id: '/account'
-      path: '/account'
-      fullPath: '/account'
-      preLoaderRoute: typeof AccountRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/host': {
-      id: '/host'
-      path: '/host'
-      fullPath: '/host'
-      preLoaderRoute: typeof HostRouteRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/': {
       id: '/'
       path: '/'
@@ -309,110 +48,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/rooms/$id': {
-      id: '/rooms/$id'
-      path: '/rooms/$id'
-      fullPath: '/rooms/$id'
-      preLoaderRoute: typeof RoomsIdRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/host/today': {
-      id: '/host/today'
-      path: '/today'
-      fullPath: '/host/today'
-      preLoaderRoute: typeof HostTodayRouteImport
-      parentRoute: typeof HostRouteRoute
-    }
-    '/host/messages': {
-      id: '/host/messages'
-      path: '/messages'
-      fullPath: '/host/messages'
-      preLoaderRoute: typeof HostMessagesRouteImport
-      parentRoute: typeof HostRouteRoute
-    }
-    '/host/listings': {
-      id: '/host/listings'
-      path: '/listings'
-      fullPath: '/host/listings'
-      preLoaderRoute: typeof HostListingsRouteImport
-      parentRoute: typeof HostRouteRoute
-    }
-    '/host/create-listing': {
-      id: '/host/create-listing'
-      path: '/create-listing'
-      fullPath: '/host/create-listing'
-      preLoaderRoute: typeof HostCreateListingRouteImport
-      parentRoute: typeof HostRouteRoute
-    }
-    '/host/calendar': {
-      id: '/host/calendar'
-      path: '/calendar'
-      fullPath: '/host/calendar'
-      preLoaderRoute: typeof HostCalendarRouteImport
-      parentRoute: typeof HostRouteRoute
-    }
-    '/host/account': {
-      id: '/host/account'
-      path: '/account'
-      fullPath: '/host/account'
-      preLoaderRoute: typeof HostAccountRouteImport
-      parentRoute: typeof HostRouteRoute
-    }
-    '/host/listings/$id/edit': {
-      id: '/host/listings/$id/edit'
-      path: '/$id/edit'
-      fullPath: '/host/listings/$id/edit'
-      preLoaderRoute: typeof HostListingsIdEditRouteImport
-      parentRoute: typeof HostListingsRoute
-    }
   }
 }
 
-interface HostListingsRouteChildren {
-  HostListingsIdEditRoute: typeof HostListingsIdEditRoute
-}
-
-const HostListingsRouteChildren: HostListingsRouteChildren = {
-  HostListingsIdEditRoute: HostListingsIdEditRoute,
-}
-
-const HostListingsRouteWithChildren = HostListingsRoute._addFileChildren(
-  HostListingsRouteChildren,
-)
-
-interface HostRouteRouteChildren {
-  HostAccountRoute: typeof HostAccountRoute
-  HostCalendarRoute: typeof HostCalendarRoute
-  HostCreateListingRoute: typeof HostCreateListingRoute
-  HostListingsRoute: typeof HostListingsRouteWithChildren
-  HostMessagesRoute: typeof HostMessagesRoute
-  HostTodayRoute: typeof HostTodayRoute
-}
-
-const HostRouteRouteChildren: HostRouteRouteChildren = {
-  HostAccountRoute: HostAccountRoute,
-  HostCalendarRoute: HostCalendarRoute,
-  HostCreateListingRoute: HostCreateListingRoute,
-  HostListingsRoute: HostListingsRouteWithChildren,
-  HostMessagesRoute: HostMessagesRoute,
-  HostTodayRoute: HostTodayRoute,
-}
-
-const HostRouteRouteWithChildren = HostRouteRoute._addFileChildren(
-  HostRouteRouteChildren,
-)
-
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  HostRouteRoute: HostRouteRouteWithChildren,
-  AccountRoute: AccountRoute,
-  LoginRoute: LoginRoute,
-  NondiscriminationRoute: NondiscriminationRoute,
-  PaymentsTermsRoute: PaymentsTermsRoute,
-  PrivacyRoute: PrivacyRoute,
-  TermsRoute: TermsRoute,
-  WishlistsRoute: WishlistsRoute,
-  RoomsIdRoute: RoomsIdRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

@@ -1,3 +1,4 @@
+import { Toaster } from "@starter/ui/components/sonner";
 import { TanStackDevtools } from "@tanstack/react-devtools";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import {
@@ -6,7 +7,6 @@ import {
   Scripts,
 } from "@tanstack/react-router";
 import { TanStackRouterDevtoolsPanel } from "@tanstack/react-router-devtools";
-import { Toaster } from "@web/components/ui/sonner";
 import i18n from "@web/lib/i18n";
 import { getUserSession } from "@web/services/auth";
 import Header from "../components/Header";
