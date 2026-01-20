@@ -1,0 +1,55 @@
+{
+  "name": "Spotfinder",
+  "header": {
+    "explore": "探索",
+    "wishlists": "願望清單",
+    "listYourSpace": "刊登您的空間",
+    "help": "幫助",
+    "logIn": "登入",
+    "logOut": "登出",
+    "userMenu": "用戶選單"
+  },
+  "mobile": {
+    "explore": "探索",
+    "wishlists": "願望清單",
+    "logIn": "登入",
+    "logOut": "登出",
+    "account": "帳戶"
+  },
+  "host": {
+    "navigation": {
+      "today": "今日",
+      "calendar": "日曆",
+      "listings": "房源",
+      "messages": "訊息"
+    },
+    "listings": {
+      "title": "房源",
+      "addNewListing": "新增房源",
+      "noListingsYet": "尚未有房源",
+      "getStarted": "開始建立您的第一個房源",
+      "createFirstListing": "建立您的第一個房源",
+      "loading": "載入中...",
+      "status": {
+        "draft": "草稿",
+        "active": "已啟用",
+        "inactive": "已停用"
+      },
+      "noPhotos": "無照片"
+    },
+    "createListing": {
+      "step1": {
+        "title": "基本資訊",
+        "subtitle": "讓我們從基本資訊開始"
+      },
+      "step2": {
+        "title": "照片",
+        "subtitle": "向房客展示您的空間"
+      },
+      "step3": {
+        "title": "定價",
+        "subtitle": "為您的空間設定競爭價格"
+      }
+    }
+  }
+}

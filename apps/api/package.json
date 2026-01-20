@@ -1,0 +1,40 @@
+{
+  "name": "api",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "bunx wrangler dev --port 3001 --ip 0.0.0.0",
+    "build": "bunx tsc --noEmit",
+    "deploy": "bunx wrangler deploy --minify",
+    "type-check": "bunx tsc --noEmit",
+    "cf-typegen": "bunx wrangler types --env-interface CloudflareBindings",
+    "db:push": "drizzle-kit push",
+    "db:generate": "drizzle-kit generate",
+    "db:migrate": "drizzle-kit migrate",
+    "db:migrate:prod": "NODE_ENV=production tsx src/db/migrate.ts",
+    "db:studio": "drizzle-kit studio",
+    "stripe:listen": "stripe listen --forward-to localhost:3001/api/stripe/webhook",
+    "stripe:trigger:account-updated": "stripe trigger account.updated"
+  },
+  "dependencies": {
+    "@hono/zod-validator": "^0.7.6",
+    "@starter/auth": "workspace:*",
+    "@starter/db": "workspace:*",
+    "better-auth": "^1.2.7",
+    "dotenv": "^16.5.0",
+    "drizzle-zod": "^0.8.3",
+    "hono": "^4.7.7",
+    "nanoid": "^5.1.6",
+    "stripe": "^20.1.2",
+    "zod": "^3.25.1"
+  },
+  "devDependencies": {
+    "@cloudflare/workers-types": "^4.20250204.0",
+    "@types/node": "^22.12.2",
+    "@types/pg": "^8.11.14",
+    "drizzle-kit": "^0.31.2",
+    "tsx": "^4.19.3",
+    "typescript": "^5.7.3",
+    "wrangler": "^4.54.0"
+  }
+}

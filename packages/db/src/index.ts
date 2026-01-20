@@ -1,0 +1,26 @@
+import { neon } from "@neondatabase/serverless";
+import { drizzle } from "drizzle-orm/neon-http";
+import * as schema from "./schema";
+
+export const createDb = (databaseUrl: string) => {
+  const sql = neon(databaseUrl);
+  return drizzle(sql, { schema });
+};
+
+export type DB = ReturnType<typeof createDb>;
+
+// Re-export drizzle-orm utilities
+export {
+  and,
+  asc,
+  desc,
+  eq,
+  gte,
+  inArray,
+  lte,
+  or,
+  type SQL,
+  sql,
+} from "drizzle-orm";
+// Re-export schema for convenience - this makes tables and relations available
+export * from "./schema";

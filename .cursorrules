@@ -1,0 +1,82 @@
+# Spotfinder Project Structure
+
+## Monorepo Overview
+- **Package Manager**: Bun
+- **Build System**: Turbo
+- **Structure**: Workspace-based monorepo with apps and packages
+
+## Apps
+
+### `apps/api` - Standalone API Server
+- **Framework**: Hono (Cloudflare Workers)
+- **Port**: 3001 (dev), 3000 (wrangler config)
+- **Auth**: Better Auth configured in `src/lib/auth.ts`
+- **Database**: PostgreSQL via Neon (connection string in `.dev.vars`)
+- **Auth Endpoint**: `/api/auth/*` - All auth routes handled by Better Auth
+- **Key Files**:
+  - `src/app.ts` - Main Hono app with auth middleware
+  - `src/lib/auth.ts` - Better Auth instance factory
+  - `.dev.vars` - Environment variables (DATABASE_URL, BETTER_AUTH_SECRET, GOOGLE_CLIENT_ID, etc.)
+
+### `apps/web` - Web Application
+- **Framework**: TanStack Router (file-based routing)
+- **Port**: 3000
+- **UI**: shadcn/ui components (New York style)
+- **Styling**: Tailwind CSS v4
+- **Key Files**:
+  - `src/routes/__root.tsx` - Root layout
+  - `src/components/Header.tsx` - Header component (responsive: top on desktop, bottom on mobile)
+  - `src/routes/` - File-based routes
+
+### `apps/native` - React Native App
+- **Framework**: Expo
+- Uses same auth package as web
+
+## Packages
+
+### `packages/auth` - Better Auth Configuration
+- **Location**: `packages/auth/src/index.ts`
+- **Exports**: `createAuth()` function
+- **Features**:
+  - Google OAuth support
+  - Drizzle adapter with PostgreSQL
+  - Expo plugin for native app
+  - Session: 7 days expiry, 1 day update age
+  - Cookies: SameSite=none, Secure, HttpOnly
+
+### `packages/db` - Database Package
+- **ORM**: Drizzle
+- **Database**: PostgreSQL
+- **Schema**: `packages/db/src/schema/`
+
+## Authentication Flow
+
+1. **API Server** (`apps/api`):
+   - Better Auth instance created per request (Cloudflare Workers requirement)
+   - Handles all `/api/auth/*` routes
+   - Auth middleware sets user/session in context for all routes
+
+2. **Web App** (`apps/web`):
+   - Needs Better Auth client setup (currently missing)
+   - Should connect to API at `http://localhost:3001/api/auth` (dev)
+   - Uses TanStack Router for navigation
+
+3. **Auth Configuration**:
+   - Google OAuth only (no email/password)
+   - Base URL: `http://localhost:3001` (dev)
+   - Trusted origins configured for CORS
+
+## Development
+
+- **API Dev**: `bun run dev:server` or `cd apps/api && bun run dev`
+- **Web Dev**: `bun run dev:web` or `cd apps/web && bun run dev`
+- **Database**: Neon PostgreSQL (connection in `.dev.vars`)
+
+## Important Notes
+
+- Better Auth client needs to be set up in web app
+- API runs on port 3001, web on port 3000
+- Auth endpoint: `http://localhost:3001/api/auth`
+- Only Google OAuth is supported
+- shadcn/ui components use `@web/components/ui` alias
+- TanStack Router uses file-based routing in `src/routes/`

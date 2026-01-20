@@ -1,0 +1,32 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "spotfinder-api",
+  "main": "src/app.ts",
+  "compatibility_date": "2025-04-24",
+  "compatibility_flags": ["nodejs_compat"],
+  "keep_vars": true,
+  "dev": {
+    "port": 3000,
+  },
+  "r2_buckets": [
+    {
+      "binding": "R2",
+      "bucket_name": "spotfinder",
+    }
+  ],
+  "observability": {
+    "enabled": false,
+    "head_sampling_rate": 1,
+    "logs": {
+      "enabled": true,
+      "head_sampling_rate": 1,
+      "persist": true,
+      "invocation_logs": true
+    },
+    "traces": {
+      "enabled": false,
+      "persist": true,
+      "head_sampling_rate": 1
+    }
+  }
+}
