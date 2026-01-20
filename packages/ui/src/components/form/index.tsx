@@ -1,0 +1,32 @@
+"use client";
+
+import { createFormHook } from "@tanstack/react-form";
+import { fieldContext, formContext } from "./context";
+import Calendar from "./fields/calendar";
+import Checkbox from "./fields/checkbox";
+import OTP from "./fields/input-otp";
+import RadioGroup from "./fields/radio";
+import Select from "./fields/select";
+import Slider from "./fields/slider";
+import Switch from "./fields/switch";
+import Text from "./fields/text";
+import TextArea from "./fields/text-area";
+
+export const { useAppForm, withFieldGroup, withForm } = createFormHook({
+  fieldContext,
+  formContext,
+  fieldComponents: {
+    Text,
+    TextArea,
+    Calendar,
+    Slider,
+    Select,
+    Switch,
+    Checkbox,
+    RadioGroup,
+    OTP,
+  },
+  formComponents: {
+    // SubmitButton
+  },
+});
