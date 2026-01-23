@@ -1,4 +1,5 @@
 import { Toaster } from "@starter/ui/components/sonner";
+import appCss from "@starter/ui/globals.css?url";
 import { TanStackDevtools } from "@tanstack/react-devtools";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import {
@@ -10,7 +11,6 @@ import { TanStackRouterDevtoolsPanel } from "@tanstack/react-router-devtools";
 import i18n from "@web/lib/i18n";
 import { getUserSession } from "@web/services/auth";
 import Header from "../components/Header";
-import appCss from "../styles.css?url";
 
 // Create QueryClient with disabled automatic refetching to prevent infinite queries
 const queryClient = new QueryClient({
