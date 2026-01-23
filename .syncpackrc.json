@@ -1,0 +1,23 @@
+{
+  "dependencyTypes": ["dev", "prod", "peer", "overrides"],
+  "source": ["package.json", "apps/*/package.json", "packages/*/package.json"],
+  "semverGroups": [
+    {
+      "label": "Use exact versions for workspace packages",
+      "packages": ["@starter/**"],
+      "range": ""
+    },
+    {
+      "label": "Use caret ranges for all other packages",
+      "packages": ["**"],
+      "range": "^"
+    }
+  ],
+  "versionGroups": [
+    {
+      "label": "Use the highest version found for each package",
+      "packages": ["**"],
+      "dependencies": ["**"]
+    }
+  ]
+}

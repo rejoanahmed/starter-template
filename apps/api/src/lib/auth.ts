@@ -1,15 +1,14 @@
 import { createAuth as createSpotfinderAuth } from "@starter/auth";
 import { openAPI } from "better-auth/plugins";
 import type { AppBindings } from "./types";
+import type { DB } from '@starter/db'
 
 /**
  * Better Auth Instance
- * Following Better Auth on Cloudflare guide pattern
- * Creates a new instance per request (required for Cloudflare Workers)
  */
-export const auth = (env: AppBindings["Bindings"]) => {
+export const auth = (env: AppBindings["Bindings"], db:DB) => {
   return createSpotfinderAuth({
-    databaseUrl: env.DATABASE_URL,
+    db,
     baseURL: env.BETTER_AUTH_URL,
     secret: env.BETTER_AUTH_SECRET,
     googleClientId: env.GOOGLE_CLIENT_ID,
@@ -17,8 +16,21 @@ export const auth = (env: AppBindings["Bindings"]) => {
     trustedOrigins: [
       ...(env.CORS_ORIGINS.split(",").map((o) => o.trim()) || []),
     ],
-    resendApiKey: env.RESEND_API_KEY,
-    resendFromEmail: env.RESEND_FROM_EMAIL,
     plugins: [openAPI()],
+    phoneNumber: {
+      sendOTP: (params) => {
+        console.log("sendOTP", params);
+      },
+    },
+    email: {
+      sendEmailVerificationOTP: (params) => {
+        console.log("sendEmailVerificationOTP", params);
+        return Promise.resolve();
+      },
+      sendInvitationEmail: (params) => {
+        console.log("sendInvitationEmail", params);
+        return Promise.resolve();
+      },
+    },
   });
 };

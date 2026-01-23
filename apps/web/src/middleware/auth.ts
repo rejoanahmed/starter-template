@@ -1,7 +1,5 @@
-import { redirect } from "@tanstack/react-router";
-import { createMiddleware } from "@tanstack/react-start";
-import { getRequest, getRequestHeaders } from "@tanstack/react-start/server";
-import { authClient } from "@web/lib/auth-client";
+import { createMiddleware } from "@tanstack/react-start"
+import { getRequest, getRequestHeaders } from "@tanstack/react-start/server"
 
 export const authMiddleware = createMiddleware().server(async ({ next }) => {
   const request = getRequest();
@@ -23,13 +21,13 @@ export const authMiddleware = createMiddleware().server(async ({ next }) => {
     headers.set("Cookie", cookieHeader);
   }
 
-  const session = await authClient.getSession({ fetchOptions: { headers } });
-  if (!session) {
-    throw redirect({
-      to: "/login",
-      search: { redirectUri: window.location.href },
-    });
-  }
+  // const session = await authClient.getSession({ fetchOptions: { headers } });
+  // if (!session) {
+  //   throw redirect({
+  //     to: "/login",
+  //     search: { redirectUri: window.location.href },
+  //   });
+  // }
 
   return await next();
 });

@@ -3,6 +3,7 @@ import { drizzle } from "drizzle-orm/neon-http";
 import * as schema from "./schema";
 
 export const createDb = (databaseUrl: string) => {
+  // use your own db, either neon or d1 planetscale etc
   const sql = neon(databaseUrl);
   return drizzle(sql, { schema });
 };
