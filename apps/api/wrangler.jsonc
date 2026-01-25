@@ -1,6 +1,6 @@
 {
   "$schema": "node_modules/wrangler/config-schema.json",
-  "name": "starter-api",
+  "name": "starter-template-api",
   "main": "src/app.ts",
   "compatibility_date": "2025-04-24",
   "compatibility_flags": ["nodejs_compat"],
@@ -8,6 +8,9 @@
   "dev": {
     "port": 3000,
   },
+  "routes": [
+		{ "pattern": "starter-api-cf.rejoanahmed.com", "custom_domain": true }
+	],
   // "r2_buckets": [
   //   {
   //     "binding": "R2",
