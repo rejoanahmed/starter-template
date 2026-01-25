@@ -1,7 +1,8 @@
-import { createAuthClient } from "better-auth/react";
+import { createWebAuthClient } from "@starter/auth/client-web";
 
-export const authClient = createAuthClient({
-  baseURL: import.meta.env.VITE_API_URL || "http://localhost:3001",
+const baseURL = import.meta.env.VITE_API_URL || "http://localhost:3001";
+
+export const authClient = createWebAuthClient({
+  baseURL,
+  googleClientId: import.meta.env.VITE_GOOGLE_CLIENT_ID,
 });
-
-export const { signIn, signOut, signUp, useSession } = authClient;

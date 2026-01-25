@@ -1,7 +1,7 @@
 import { Toaster } from "@starter/ui/components/sonner";
 import appCss from "@starter/ui/globals.css?url";
 import { TanStackDevtools } from "@tanstack/react-devtools";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { type QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import {
   createRootRouteWithContext,
   HeadContent,
@@ -11,19 +11,6 @@ import {
 import { TanStackRouterDevtoolsPanel } from "@tanstack/react-router-devtools";
 import i18n, { setSSRLanguage } from "@web/lib/i18n";
 import { getUserSession } from "@web/services/auth";
-import Header from "../components/Header";
-
-// Create QueryClient with disabled automatic refetching to prevent infinite queries
-const queryClient = new QueryClient({
-  defaultOptions: {
-    queries: {
-      refetchOnMount: false,
-      refetchOnWindowFocus: false,
-      refetchOnReconnect: false,
-      refetchInterval: false,
-    },
-  },
-});
 
 export const Route = createRootRouteWithContext<{
   queryClient: QueryClient;
@@ -130,6 +117,7 @@ export const Route = createRootRouteWithContext<{
 function RootDocument({ children }: { children: React.ReactNode }) {
   const context = useRouteContext({ from: "__root__" });
   const language = context.language || i18n.language || "en";
+  const queryClient = context.queryClient;
 
   return (
     <html lang={language}>
@@ -139,7 +127,6 @@ function RootDocument({ children }: { children: React.ReactNode }) {
       </head>
       <body className="pb-16 lg:pb-0">
         <QueryClientProvider client={queryClient}>
-          <Header />
           {children}
           <TanStackDevtools
             config={{

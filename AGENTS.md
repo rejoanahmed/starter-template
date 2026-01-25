@@ -22,6 +22,11 @@ Bun-powered monorepo with Turbo. This starter includes **web** (TanStack Router/
 - `bun run db:generate` - Generate Drizzle migrations
 - `bun run db:migrate` - Run migrations
 
+### Adding a new schema (feature tables)
+Schema lives in `packages/db/src/schema/`. **`auth.ts` is owned by Better Auth**: do not hand-edit; regenerate with `bun run auth:generate-schema` after auth config changes.
+
+**One file per feature.** Put all tables and relations for that domain in a single file, e.g.: `todo.ts` – tables and relations for todo (tasks, lists, etc.)
+
 ### Dependency / workspace scripts
 - `bun run syncpack:check` - List version mismatches across workspaces
 - `bun run syncpack:fix` - Fix mismatches (`syncpack fix-mismatches`)
@@ -36,10 +41,10 @@ Bun-powered monorepo with Turbo. This starter includes **web** (TanStack Router/
 Components live in **`packages/ui`**. From repo root:
 
 ```bash
-cd packages/ui && bunx --bun shadcn@latest add <component-name> -y -o
+cd packages/ui && bunx --bun shadcn@latest add <component-name>
 ```
 
-Example: `cd packages/ui && bunx --bun shadcn@latest add card -y -o`. New components are added under `packages/ui/src/components/` and use aliases from `packages/ui/components.json` (`@starter/ui/components`, `@starter/ui/lib/utils`, etc.).
+Example: `cd packages/ui && bunx --bun shadcn@latest add card`. New components are added under `packages/ui/src/components/` and use aliases from `packages/ui/components.json` (`@starter/ui/components`, `@starter/ui/lib/utils`, etc.).
 
 ### App-specific commands
 - **Web** (`apps/web`): `bun run dev`, `bun run build`, `bun run test`
@@ -61,7 +66,7 @@ Example: `cd packages/ui && bunx --bun shadcn@latest add card -y -o`. New compon
 ### Packages
 - `packages/auth` - Better Auth (e.g. Google OAuth)
 - `packages/db` - Drizzle ORM, schema
-- `packages/ui` - Shared ShadCN/UI components (add via `cd packages/ui && bunx shadcn@latest add <name> -y -o`)
+- `packages/ui` - Shared ShadCN/UI components (add via `cd packages/ui && bunx shadcn@latest add <name>`)
 - `packages/config` - Shared config
 
 ### Authentication

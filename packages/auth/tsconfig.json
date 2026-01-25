@@ -1,5 +1,6 @@
 {
   "extends": "@starter/config/base.json",
+  "include": ["src"],
   "compilerOptions": {
     "declaration": true,
     "declarationMap": true,

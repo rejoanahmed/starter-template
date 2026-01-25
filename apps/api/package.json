@@ -17,6 +17,7 @@
     "stripe:trigger:account-updated": "stripe trigger account.updated"
   },
   "dependencies": {
+    "@hono/zod-openapi": "^1.2.0",
     "@hono/zod-validator": "^0.7.6",
     "@starter/auth": "workspace:*",
     "@starter/db": "workspace:*",

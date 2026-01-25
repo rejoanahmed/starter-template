@@ -11,6 +11,10 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as OrgOrgIdRouteRouteImport } from './routes/org/$orgId/route'
+import { Route as OrgOrgIdIndexRouteImport } from './routes/org/$orgId/index'
+import { Route as OrgOrgIdTeamTeamIdIssuesRouteImport } from './routes/org/$orgId/team/$teamId/issues'
+import { Route as OrgOrgIdTeamTeamIdBoardRouteImport } from './routes/org/$orgId/team/$teamId/board'
 
 const LoginRoute = LoginRouteImport.update({
   id: '/login',
@@ -22,31 +26,82 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const OrgOrgIdRouteRoute = OrgOrgIdRouteRouteImport.update({
+  id: '/org/$orgId',
+  path: '/org/$orgId',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const OrgOrgIdIndexRoute = OrgOrgIdIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => OrgOrgIdRouteRoute,
+} as any)
+const OrgOrgIdTeamTeamIdIssuesRoute =
+  OrgOrgIdTeamTeamIdIssuesRouteImport.update({
+    id: '/team/$teamId/issues',
+    path: '/team/$teamId/issues',
+    getParentRoute: () => OrgOrgIdRouteRoute,
+  } as any)
+const OrgOrgIdTeamTeamIdBoardRoute = OrgOrgIdTeamTeamIdBoardRouteImport.update({
+  id: '/team/$teamId/board',
+  path: '/team/$teamId/board',
+  getParentRoute: () => OrgOrgIdRouteRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/login': typeof LoginRoute
+  '/org/$orgId': typeof OrgOrgIdRouteRouteWithChildren
+  '/org/$orgId/': typeof OrgOrgIdIndexRoute
+  '/org/$orgId/team/$teamId/board': typeof OrgOrgIdTeamTeamIdBoardRoute
+  '/org/$orgId/team/$teamId/issues': typeof OrgOrgIdTeamTeamIdIssuesRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/login': typeof LoginRoute
+  '/org/$orgId': typeof OrgOrgIdIndexRoute
+  '/org/$orgId/team/$teamId/board': typeof OrgOrgIdTeamTeamIdBoardRoute
+  '/org/$orgId/team/$teamId/issues': typeof OrgOrgIdTeamTeamIdIssuesRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/login': typeof LoginRoute
+  '/org/$orgId': typeof OrgOrgIdRouteRouteWithChildren
+  '/org/$orgId/': typeof OrgOrgIdIndexRoute
+  '/org/$orgId/team/$teamId/board': typeof OrgOrgIdTeamTeamIdBoardRoute
+  '/org/$orgId/team/$teamId/issues': typeof OrgOrgIdTeamTeamIdIssuesRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/login'
+  fullPaths:
+    | '/'
+    | '/login'
+    | '/org/$orgId'
+    | '/org/$orgId/'
+    | '/org/$orgId/team/$teamId/board'
+    | '/org/$orgId/team/$teamId/issues'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/login'
-  id: '__root__' | '/' | '/login'
+  to:
+    | '/'
+    | '/login'
+    | '/org/$orgId'
+    | '/org/$orgId/team/$teamId/board'
+    | '/org/$orgId/team/$teamId/issues'
+  id:
+    | '__root__'
+    | '/'
+    | '/login'
+    | '/org/$orgId'
+    | '/org/$orgId/'
+    | '/org/$orgId/team/$teamId/board'
+    | '/org/$orgId/team/$teamId/issues'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   LoginRoute: typeof LoginRoute
+  OrgOrgIdRouteRoute: typeof OrgOrgIdRouteRouteWithChildren
 }
 
 declare module '@tanstack/react-router' {
@@ -65,12 +120,57 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/org/$orgId': {
+      id: '/org/$orgId'
+      path: '/org/$orgId'
+      fullPath: '/org/$orgId'
+      preLoaderRoute: typeof OrgOrgIdRouteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/org/$orgId/': {
+      id: '/org/$orgId/'
+      path: '/'
+      fullPath: '/org/$orgId/'
+      preLoaderRoute: typeof OrgOrgIdIndexRouteImport
+      parentRoute: typeof OrgOrgIdRouteRoute
+    }
+    '/org/$orgId/team/$teamId/issues': {
+      id: '/org/$orgId/team/$teamId/issues'
+      path: '/team/$teamId/issues'
+      fullPath: '/org/$orgId/team/$teamId/issues'
+      preLoaderRoute: typeof OrgOrgIdTeamTeamIdIssuesRouteImport
+      parentRoute: typeof OrgOrgIdRouteRoute
+    }
+    '/org/$orgId/team/$teamId/board': {
+      id: '/org/$orgId/team/$teamId/board'
+      path: '/team/$teamId/board'
+      fullPath: '/org/$orgId/team/$teamId/board'
+      preLoaderRoute: typeof OrgOrgIdTeamTeamIdBoardRouteImport
+      parentRoute: typeof OrgOrgIdRouteRoute
+    }
   }
 }
+
+interface OrgOrgIdRouteRouteChildren {
+  OrgOrgIdIndexRoute: typeof OrgOrgIdIndexRoute
+  OrgOrgIdTeamTeamIdBoardRoute: typeof OrgOrgIdTeamTeamIdBoardRoute
+  OrgOrgIdTeamTeamIdIssuesRoute: typeof OrgOrgIdTeamTeamIdIssuesRoute
+}
+
+const OrgOrgIdRouteRouteChildren: OrgOrgIdRouteRouteChildren = {
+  OrgOrgIdIndexRoute: OrgOrgIdIndexRoute,
+  OrgOrgIdTeamTeamIdBoardRoute: OrgOrgIdTeamTeamIdBoardRoute,
+  OrgOrgIdTeamTeamIdIssuesRoute: OrgOrgIdTeamTeamIdIssuesRoute,
+}
+
+const OrgOrgIdRouteRouteWithChildren = OrgOrgIdRouteRoute._addFileChildren(
+  OrgOrgIdRouteRouteChildren,
+)
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   LoginRoute: LoginRoute,
+  OrgOrgIdRouteRoute: OrgOrgIdRouteRouteWithChildren,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

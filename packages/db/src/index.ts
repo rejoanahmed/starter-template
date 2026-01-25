@@ -17,6 +17,7 @@ export {
   desc,
   eq,
   gte,
+  ilike,
   inArray,
   lte,
   or,

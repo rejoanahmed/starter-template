@@ -1,10 +1,11 @@
 import { getAuth } from "@api/lib/auth";
 import type { AppBindings } from "@api/lib/types";
-import { Hono } from "hono";
+import { todosApi } from "@api/routes/issues";
+import { OpenAPIHono } from "@hono/zod-openapi";
 import { cors } from "hono/cors";
 import { getDb } from "./lib/db";
 
-const app = new Hono<AppBindings>();
+const app = new OpenAPIHono<AppBindings>();
 const route = app
   .use(
     "*",
@@ -93,7 +94,13 @@ const route = app
   )
 
   // Mount routes - these inherit the parent middleware context
+  .route("/todos", todosApi)
   .get("/", (c) => c.text("OK"));
+
+app.doc("/doc", {
+  openapi: "3.0.0",
+  info: { title: "Starter API", version: "1.0.0" },
+});
 
 export default app;
 export type AppType = typeof route;

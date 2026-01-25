@@ -1,5 +1,5 @@
-import { createMiddleware } from "@tanstack/react-start"
-import { getRequest, getRequestHeaders } from "@tanstack/react-start/server"
+import { createMiddleware } from "@tanstack/react-start";
+import { getRequest, getRequestHeaders } from "@tanstack/react-start/server";
 
 export const authMiddleware = createMiddleware().server(async ({ next }) => {
   const request = getRequest();

@@ -118,6 +118,7 @@ export function createAuth(config: AuthConfig) {
         clientSecret: config.googleClientSecret,
       },
     },
+    emailAndPassword: { enabled: true, requireEmailVerification: false },
     database: drizzleAdapter(config.db, {
       provider: "pg",
       schema,
