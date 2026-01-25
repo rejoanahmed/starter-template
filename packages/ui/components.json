@@ -13,8 +13,11 @@
   "aliases": {
     "components": "@starter/ui/components",
     "utils": "@starter/ui/lib/utils",
-    "hooks": "@starter/ui/hooks",
+    "ui": "@starter/ui/components",
     "lib": "@starter/ui/lib",
-    "ui": "@starter/ui/components"
+    "hooks": "@starter/ui/hooks"
+  },
+  "registries": {
+    "@diceui": "https://diceui.com/r/{name}.json"
   }
 }
