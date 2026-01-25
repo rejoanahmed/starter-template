@@ -5,7 +5,7 @@ import { account, session, user } from "@starter/db/schema/auth";
 export const TEST_USER = {
   id: "test-user-id",
   name: "Test User",
-  email: "test@spotfinder.dev",
+  email: "test@starter.dev",
   sessionToken: "test-session-token",
   accountId: "test-account-id",
   providerId: "google",

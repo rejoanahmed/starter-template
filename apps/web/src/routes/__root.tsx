@@ -62,7 +62,7 @@ export const Route = createRootRouteWithContext<{
       },
       {
         property: "og:url",
-        content: "https://spotfinder.com",
+        content: "https://starter.rejoanahmed.com",
       },
       {
         name: "twitter:card",
