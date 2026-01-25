@@ -127,12 +127,12 @@ export default function Header() {
                 <span>{t("nav.logOut")}</span>
               </DropdownMenuItem>
             ) : (
-              <DropdownMenuItem>
-                <Link className="flex items-center gap-2" to="/login">
+              <Link search={{ redirect: "/" }} to="/login">
+                <DropdownMenuItem className="w-full">
                   <HugeiconsIcon icon={User02Icon} size={16} />
                   <span>{t("nav.logIn")}</span>
-                </Link>
-              </DropdownMenuItem>
+                </DropdownMenuItem>
+              </Link>
             )}
           </DropdownMenuContent>
         </DropdownMenu>

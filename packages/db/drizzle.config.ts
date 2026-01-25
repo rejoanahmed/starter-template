@@ -2,7 +2,7 @@ import dotenv from "dotenv";
 import { defineConfig } from "drizzle-kit";
 
 // Try to load .env from various locations
-const envPaths = ["../../apps/api/.env", "../../apps/server/.env", ".env"];
+const envPaths = [".env"];
 
 for (const path of envPaths) {
   try {

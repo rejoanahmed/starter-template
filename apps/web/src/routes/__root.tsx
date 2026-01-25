@@ -6,9 +6,10 @@ import {
   createRootRouteWithContext,
   HeadContent,
   Scripts,
+  useRouteContext,
 } from "@tanstack/react-router";
 import { TanStackRouterDevtoolsPanel } from "@tanstack/react-router-devtools";
-import i18n from "@web/lib/i18n";
+import i18n, { setSSRLanguage } from "@web/lib/i18n";
 import { getUserSession } from "@web/services/auth";
 import Header from "../components/Header";
 
@@ -26,13 +27,16 @@ const queryClient = new QueryClient({
 
 export const Route = createRootRouteWithContext<{
   queryClient: QueryClient;
+  language?: string;
 }>()({
   beforeLoad: async ({ context }) => {
+    // Set language on server to match client
+    await setSSRLanguage();
     const session = await context.queryClient.ensureQueryData({
       queryKey: ["session"],
       queryFn: () => getUserSession(),
     });
-    return { session };
+    return { session, language: i18n.language };
   },
   head: () => ({
     meta: [
@@ -124,8 +128,11 @@ export const Route = createRootRouteWithContext<{
 });
 
 function RootDocument({ children }: { children: React.ReactNode }) {
+  const context = useRouteContext({ from: "__root__" });
+  const language = context.language || i18n.language || "en";
+
   return (
-    <html lang={i18n.language}>
+    <html lang={language}>
       {/** biome-ignore lint/style/noHeadElement: re */}
       <head>
         <HeadContent />
