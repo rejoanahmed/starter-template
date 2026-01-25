@@ -51,14 +51,15 @@ test("can create issue from Team Issues page", async ({ page }) => {
     page.getByRole("dialog").getByRole("heading", { name: /new issue/i })
   ).toBeVisible();
 
-  await page
-    .getByRole("dialog")
-    .getByPlaceholder(/title/i)
-    .fill("E2E test issue");
+  const title = `E2E issue ${Date.now()}`;
+  await page.getByRole("dialog").getByPlaceholder(/title/i).fill(title);
   await page
     .getByRole("dialog")
     .getByRole("button", { name: /create issue/i })
     .click();
 
-  await expect(page.getByText(/issue created/i)).toBeVisible();
+  await expect(
+    page.getByRole("dialog").getByRole("heading", { name: /new issue/i })
+  ).toBeHidden();
+  await expect(page.getByText(title)).toBeVisible({ timeout: 10000 });
 });
