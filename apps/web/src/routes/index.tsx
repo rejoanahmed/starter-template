@@ -3,9 +3,7 @@ import { NoOrgShell } from "@web/components/layout";
 
 export const Route = createFileRoute("/")({
   beforeLoad: ({ context }) => {
-    const session = context.session as
-      | { user: unknown; session?: { activeOrganizationId?: string | null } }
-      | undefined;
+    const session = context.session;
     if (!session?.user) {
       return;
     }

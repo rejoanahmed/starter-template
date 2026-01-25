@@ -11,11 +11,12 @@ export const getAuth = (env: AppBindings["Bindings"], db: DB) => {
     db,
     baseURL: env.BETTER_AUTH_URL,
     secret: env.BETTER_AUTH_SECRET,
-    googleClientId: "",
-    googleClientSecret: "",
+    googleClientId: env.GOOGLE_CLIENT_ID,
+    googleClientSecret: env.GOOGLE_CLIENT_SECRET,
     trustedOrigins: [
       ...(env.CORS_ORIGINS.split(",").map((o) => o.trim()) || []),
     ],
+    subDomainPrefix: ".rejoanahmed.com",
     plugins: [openAPI()],
     phoneNumber: {
       sendOTP: (params) => {

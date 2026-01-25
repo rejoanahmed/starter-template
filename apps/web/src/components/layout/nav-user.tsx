@@ -65,7 +65,21 @@ export function NavUser() {
     router.navigate({ to: "/", reloadDocument: true });
   };
 
-  if (!user) return null;
+  if (!user) {
+    return (
+      <SidebarMenu>
+        <SidebarMenuItem>
+          <Link
+            className="hover:bg-sidebar-accent hover:text-sidebar-accent-foreground flex h-12 w-full items-center gap-2 rounded-lg p-2 text-left text-sm outline-none transition-[width,height,padding] focus-visible:ring-2 focus-visible:ring-sidebar-ring group-data-[collapsible=icon]:p-0"
+            search={{ redirect: "/" }}
+            to="/login"
+          >
+            Sign in
+          </Link>
+        </SidebarMenuItem>
+      </SidebarMenu>
+    );
+  }
 
   const displayName = user.name ?? user.email ?? "User";
   const image = (user.image ?? "").trim() || undefined;
@@ -105,20 +119,22 @@ export function NavUser() {
             side={isMobile ? "bottom" : "right"}
             sideOffset={4}
           >
-            <DropdownMenuLabel className="p-0 font-normal">
-              <div className="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
-                <Avatar className="h-8 w-8 rounded-lg">
-                  <AvatarImage alt={displayName} src={image} />
-                  <AvatarFallback className="rounded-lg">
-                    {initials(user.name, user.email)}
-                  </AvatarFallback>
-                </Avatar>
-                <div className="grid flex-1 text-left text-sm leading-tight">
-                  <span className="truncate font-medium">{displayName}</span>
-                  <span className="truncate text-xs">{user.email ?? ""}</span>
+            <DropdownMenuGroup>
+              <DropdownMenuLabel className="p-0 font-normal">
+                <div className="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
+                  <Avatar className="h-8 w-8 rounded-lg">
+                    <AvatarImage alt={displayName} src={image} />
+                    <AvatarFallback className="rounded-lg">
+                      {initials(user.name, user.email)}
+                    </AvatarFallback>
+                  </Avatar>
+                  <div className="grid flex-1 text-left text-sm leading-tight">
+                    <span className="truncate font-medium">{displayName}</span>
+                    <span className="truncate text-xs">{user.email ?? ""}</span>
+                  </div>
                 </div>
-              </div>
-            </DropdownMenuLabel>
+              </DropdownMenuLabel>
+            </DropdownMenuGroup>
             <DropdownMenuSeparator />
             <DropdownMenuGroup>
               <DropdownMenuItem>
