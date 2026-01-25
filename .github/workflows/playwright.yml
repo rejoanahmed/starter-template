@@ -52,11 +52,20 @@ jobs:
       - name: Install dependencies
         run: bun install --frozen-lockfile
 
+      - name: Cache Playwright browsers
+        uses: actions/cache@v4
+        id: playwright-cache
+        with:
+          path: ~/.cache/ms-playwright
+          key: playwright-${{ runner.os }}-${{ hashFiles('bun.lock', 'apps/web/package.json') }}
+          restore-keys: |
+            playwright-${{ runner.os }}-
+
       - name: Install Playwright Browsers
         run: bunx playwright install --with-deps
 
       - name: Push schema to database
-        run: bun run db:push
+        run: cd packages/db && bun run db:push
         env:
           DATABASE_URL: ${{ steps.create_neon_branch.outputs.db_url_pooled }}
 
@@ -141,6 +150,6 @@ jobs:
         if: github.event.pull_request.merged == true
         run: |
           bun install --frozen-lockfile
-          bun run db:push
+          cd packages/db && bun run db:push
         env:
           DATABASE_URL: ${{ secrets.DATABASE_URL }}
