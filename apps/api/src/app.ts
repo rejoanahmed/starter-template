@@ -1,6 +1,6 @@
 import { getAuth } from "@api/lib/auth";
 import type { AppBindings } from "@api/lib/types";
-import { todosApi } from "@api/routes/issues";
+import { todosApi } from "@api/routes/todo";
 import { OpenAPIHono } from "@hono/zod-openapi";
 import { cors } from "hono/cors";
 import { getDb } from "./lib/db";

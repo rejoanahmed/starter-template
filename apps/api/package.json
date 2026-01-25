@@ -39,7 +39,7 @@
   },
   "devDependencies": {
     "tsdown": "^0.20.1",
-    "@cloudflare/workers-types": "^4.20260123.0",
+    "@cloudflare/workers-types": "^4.20260124.0",
     "@types/node": "^25.0.10",
     "@types/pg": "^8.16.0",
     "drizzle-kit": "^0.31.8",
