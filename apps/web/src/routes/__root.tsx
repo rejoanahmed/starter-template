@@ -11,6 +11,7 @@ import {
 import { TanStackRouterDevtoolsPanel } from "@tanstack/react-router-devtools";
 import i18n, { setSSRLanguage } from "@web/lib/i18n";
 import { getUserSession } from "@web/services/auth";
+import { NuqsAdapter } from "nuqs/adapters/tanstack-router";
 
 export const Route = createRootRouteWithContext<{
   queryClient: QueryClient;
@@ -127,7 +128,7 @@ function RootDocument({ children }: { children: React.ReactNode }) {
       </head>
       <body className="pb-16 lg:pb-0">
         <QueryClientProvider client={queryClient}>
-          {children}
+          <NuqsAdapter>{children}</NuqsAdapter>
           <TanStackDevtools
             config={{
               position: "bottom-right",

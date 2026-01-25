@@ -8,6 +8,7 @@ import {
 } from "@starter/ui/components/card";
 import { createFileRoute, useRouter, useSearch } from "@tanstack/react-router";
 import { authClient } from "@web/lib/auth-client";
+import { extractRedirectURL } from "@web/lib/util";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 
@@ -36,7 +37,7 @@ function RouteComponent() {
   const handleGoogleSignIn = async () => {
     try {
       setIsLoading(true);
-      const callbackURL = redirect || "/";
+      const callbackURL = extractRedirectURL(redirect);
       const { error } = await authClient.signIn.social({
         provider: "google",
         callbackURL,

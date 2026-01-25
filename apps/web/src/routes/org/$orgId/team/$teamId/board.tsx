@@ -1,23 +1,25 @@
-import {
-  DndContext,
-  type DragEndEvent,
-  DragOverlay,
-  type DragStartEvent,
-  PointerSensor,
-  useSensor,
-  useSensors,
-} from "@dnd-kit/core";
 import { Badge } from "@starter/ui/components/badge";
 import { Card, CardContent, CardHeader } from "@starter/ui/components/card";
+import {
+  Kanban,
+  KanbanBoard,
+  KanbanColumn,
+  KanbanItem,
+  KanbanOverlay,
+} from "@starter/ui/components/kanban";
 import { Skeleton } from "@starter/ui/components/skeleton";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { createFileRoute } from "@tanstack/react-router";
-import { BoardColumn } from "@web/components/board-column";
 import { api } from "@web/lib/api-client";
-import { useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { toast } from "sonner";
 
 const STATUSES = ["todo", "in_progress", "done"] as const;
+const COLUMN_TITLES: Record<(typeof STATUSES)[number], string> = {
+  todo: "Todo",
+  in_progress: "In Progress",
+  done: "Done",
+};
 
 type Issue = {
   id: string;
@@ -32,46 +34,83 @@ type Issue = {
   createdAt: string;
 };
 
+type ColumnsValue = Record<(typeof STATUSES)[number], Issue[]>;
+
 export const Route = createFileRoute("/org/$orgId/team/$teamId/board")({
   component: TeamBoardPage,
 });
 
+function toColumns(issues: Issue[]): ColumnsValue {
+  const cols: ColumnsValue = {
+    todo: [],
+    in_progress: [],
+    done: [],
+  };
+  for (const issue of issues) {
+    if (cols[issue.status]) cols[issue.status].push(issue);
+  }
+  return cols;
+}
+
+function IssueCardContent({ issue }: { issue: Issue }) {
+  return (
+    <Card className="w-72 shrink-0">
+      <CardHeader className="py-2 px-3">
+        <div className="flex items-center justify-between gap-2">
+          <span className="font-medium truncate">{issue.title}</span>
+          <Badge variant="secondary">{issue.priority}</Badge>
+        </div>
+      </CardHeader>
+      {issue.dueDate && (
+        <CardContent className="py-0 px-3 text-muted-foreground text-xs pb-2">
+          Due {new Date(issue.dueDate).toLocaleDateString()}
+        </CardContent>
+      )}
+    </Card>
+  );
+}
+
 function TeamBoardPage() {
   const { orgId, teamId } = Route.useParams();
   const queryClient = useQueryClient();
-  const [activeId, setActiveId] = useState<string | null>(null);
 
-  const { data: issues = [], isLoading } = useQuery({
+  const { data, isLoading } = useQuery({
     queryKey: ["board-issues", orgId, teamId],
     queryFn: async () => {
       const res = await api.todos[":orgId"].team[":teamId"].issues.$get({
         param: { orgId, teamId },
-        query: {},
+        query: { page: 1, perPage: 500 },
       });
       if (!res.ok) throw new Error("Failed to fetch issues");
-      return res.json() as Promise<Issue[]>;
+      const json = (await res.json()) as { data: Issue[]; totalCount: number };
+      return json.data;
     },
     enabled: !!orgId && !!teamId,
   });
+
+  const issues = data ?? [];
+  const serverColumns = useMemo(() => toColumns(issues), [issues]);
+  const [columns, setColumns] = useState<ColumnsValue>(serverColumns);
+  const serverColumnsRef = useRef(serverColumns);
+  serverColumnsRef.current = serverColumns;
+
+  useEffect(() => {
+    setColumns(serverColumns);
+  }, [serverColumns]);
 
   const patchMutation = useMutation({
     mutationFn: async ({
       issueId,
       status,
-      position,
     }: {
       issueId: string;
       status: "todo" | "in_progress" | "done";
-      position?: number;
     }) => {
       const res = await api.todos[":orgId"].team[":teamId"].issues[
         ":issueId"
       ].$patch({
         param: { orgId, teamId, issueId },
-        json: {
-          status,
-          ...(position != null && { position }),
-        },
+        json: { status },
       });
       if (!res.ok) throw new Error("Failed to update issue");
       return res.json();
@@ -80,55 +119,43 @@ function TeamBoardPage() {
       queryClient.invalidateQueries({
         queryKey: ["board-issues", orgId, teamId],
       });
-      setActiveId(null);
     },
     onError: (e: Error) => {
       toast.error(e.message);
-      setActiveId(null);
+      setColumns(serverColumnsRef.current);
     },
   });
 
-  const sensors = useSensors(
-    useSensor(PointerSensor, {
-      activationConstraint: { distance: 8 },
-    })
-  );
-
-  const handleDragStart = (e: DragStartEvent) =>
-    setActiveId(String(e.active.id));
-  const handleDragEnd = (e: DragEndEvent) => {
-    const id = String(e.active.id);
-    const overId = e.over?.id != null ? String(e.over.id) : null;
-    setActiveId(null);
-    if (!overId || overId === id) return;
-    const issue = issues.find((i) => i.id === id);
-    if (!issue) return;
-    let newStatus: (typeof STATUSES)[number] | null = STATUSES.includes(
-      overId as (typeof STATUSES)[number]
-    )
-      ? (overId as (typeof STATUSES)[number])
-      : null;
-    if (!newStatus) {
-      const overIssue = issues.find((i) => i.id === overId);
-      if (overIssue) newStatus = overIssue.status;
+  const handleValueChange = (next: Record<string, Issue[]>) => {
+    setColumns(next as ColumnsValue);
+    const prevIds = new Map<string, string>();
+    for (const [col, items] of Object.entries(columns)) {
+      for (const i of items) prevIds.set(i.id, col);
     }
-    if (newStatus && newStatus !== issue.status) {
-      patchMutation.mutate({ issueId: id, status: newStatus });
+    for (const [col, items] of Object.entries(next)) {
+      for (const i of items) {
+        const s = prevIds.get(i.id);
+        if (s && s !== col) {
+          patchMutation.mutate({
+            issueId: i.id,
+            status: col as "todo" | "in_progress" | "done",
+          });
+          return;
+        }
+      }
     }
   };
 
-  const columns = STATUSES.map((status) => ({
-    id: status,
-    title:
-      status === "todo"
-        ? "Todo"
-        : status === "in_progress"
-          ? "In Progress"
-          : "Done",
-    issues: issues.filter((i) => i.status === status),
-  }));
+  const value = useMemo(
+    () =>
+      Object.fromEntries(STATUSES.map((s) => [s, columns[s] ?? []])) as Record<
+        string,
+        Issue[]
+      >,
+    [columns]
+  );
 
-  const activeIssue = activeId ? issues.find((i) => i.id === activeId) : null;
+  const allIssues = useMemo(() => Object.values(columns).flat(), [columns]);
 
   if (isLoading) {
     return (
@@ -146,41 +173,37 @@ function TeamBoardPage() {
   return (
     <div className="p-6">
       <h1 className="text-2xl font-semibold mb-4">Board</h1>
-      <DndContext
-        onDragEnd={handleDragEnd}
-        onDragStart={handleDragStart}
-        sensors={sensors}
+      <Kanban<Issue>
+        getItemValue={(i) => i.id}
+        onValueChange={handleValueChange}
+        value={value}
       >
-        <div className="flex gap-4 overflow-x-auto pb-4">
-          {columns.map((col) => (
-            <BoardColumn
-              id={col.id}
-              issues={col.issues}
-              key={col.id}
-              title={col.title}
-            />
+        <KanbanBoard className="min-h-[320px] overflow-x-auto pb-4">
+          {STATUSES.map((status) => (
+            <KanbanColumn
+              className="min-w-[288px] min-h-[320px]"
+              key={status}
+              value={status}
+            >
+              <h2 className="mb-2 px-1 font-semibold text-sm">
+                {COLUMN_TITLES[status]}
+              </h2>
+              {(columns[status] ?? []).map((issue) => (
+                <KanbanItem asHandle key={issue.id} value={issue.id}>
+                  <IssueCardContent issue={issue} />
+                </KanbanItem>
+              ))}
+            </KanbanColumn>
           ))}
-        </div>
-        <DragOverlay>
-          {activeIssue ? (
-            <Card className="w-72 shrink-0 opacity-90 shadow-lg">
-              <CardHeader className="py-2 px-3">
-                <div className="flex items-center justify-between gap-2">
-                  <span className="font-medium truncate">
-                    {activeIssue.title}
-                  </span>
-                  <Badge variant="secondary">{activeIssue.priority}</Badge>
-                </div>
-              </CardHeader>
-              {activeIssue.dueDate && (
-                <CardContent className="py-0 px-3 text-muted-foreground text-xs">
-                  Due {new Date(activeIssue.dueDate).toLocaleDateString()}
-                </CardContent>
-              )}
-            </Card>
-          ) : null}
-        </DragOverlay>
-      </DndContext>
+        </KanbanBoard>
+        <KanbanOverlay>
+          {({ value: activeId, variant }) => {
+            if (variant !== "item" || typeof activeId !== "string") return null;
+            const issue = allIssues.find((i) => i.id === activeId);
+            return issue ? <IssueCardContent issue={issue} /> : null;
+          }}
+        </KanbanOverlay>
+      </Kanban>
     </div>
   );
 }

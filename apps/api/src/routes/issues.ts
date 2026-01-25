@@ -1,6 +1,18 @@
 import type { AppBindings } from "@api/lib/types";
 import { createRoute, OpenAPIHono, z } from "@hono/zod-openapi";
-import { and, asc, eq, gte, ilike, inArray, lte, or, sql } from "@starter/db";
+import {
+  and,
+  asc,
+  desc,
+  eq,
+  gte,
+  ilike,
+  inArray,
+  lte,
+  or,
+  type SQL,
+  sql,
+} from "@starter/db";
 import { member, team as teamTable } from "@starter/db/schema/auth";
 import {
   issueLabel as issueLabelTable,
@@ -90,6 +102,26 @@ const ListIssuesQuerySchema = z.object({
     .openapi({ param: { name: "dueAfter", in: "query" } }),
 });
 
+const TeamListIssuesQuerySchema = ListIssuesQuerySchema.extend({
+  page: z.coerce
+    .number()
+    .int()
+    .min(1)
+    .default(1)
+    .openapi({ param: { name: "page", in: "query" } }),
+  perPage: z.coerce
+    .number()
+    .int()
+    .min(1)
+    .max(100)
+    .default(10)
+    .openapi({ param: { name: "perPage", in: "query" } }),
+  sort: z
+    .string()
+    .optional()
+    .openapi({ param: { name: "sort", in: "query" } }), // "title:asc" | "title:desc" | "createdAt:asc" etc
+});
+
 const CreateIssueBodySchema = z
   .object({
     title: z.string().min(1),
@@ -129,6 +161,13 @@ const IssueSchema = z
   })
   .openapi("Issue");
 
+const PaginatedIssuesResponseSchema = z
+  .object({
+    data: z.array(IssueSchema),
+    totalCount: z.number(),
+  })
+  .openapi("PaginatedIssuesResponse");
+
 const LabelSchema = z
   .object({
     id: z.string(),
@@ -162,11 +201,13 @@ const routeMyIssues = createRoute({
 const routeTeamIssues = createRoute({
   method: "get",
   path: "/{orgId}/team/{teamId}/issues",
-  request: { params: OrgTeamParamsSchema, query: ListIssuesQuerySchema },
+  request: { params: OrgTeamParamsSchema, query: TeamListIssuesQuerySchema },
   responses: {
     200: {
-      content: { "application/json": { schema: z.array(IssueSchema) } },
-      description: "Issues in the team",
+      content: {
+        "application/json": { schema: PaginatedIssuesResponseSchema },
+      },
+      description: "Paginated issues in the team",
     },
   },
 });
@@ -351,9 +392,9 @@ const todosApi = new OpenAPIHono<AppBindings>({
     const { orgId, teamId } = c.req.valid("param");
     const q = c.req.valid("query");
     const { db } = await requireTeamInOrg(c, orgId, teamId);
-    const labelIds = q.labelIds?.split(",").filter(Boolean);
+    const labelIdsList = q.labelIds?.split(",").filter(Boolean) ?? [];
 
-    const conditions = [eq(issueTable.teamId, teamId)];
+    const conditions: SQL[] = [eq(issueTable.teamId, teamId)];
     if (q.search) {
       const searchCond = or(
         ilike(issueTable.title, `%${q.search}%`),
@@ -370,21 +411,54 @@ const todosApi = new OpenAPIHono<AppBindings>({
     if (q.dueAfter)
       conditions.push(gte(issueTable.dueDate, new Date(q.dueAfter)));
 
-    let issues = await db
+    if (labelIdsList.length > 0) {
+      const withLabelIds = (
+        await db
+          .selectDistinct({ issueId: issueLabelTable.issueId })
+          .from(issueLabelTable)
+          .where(inArray(issueLabelTable.labelId, labelIdsList))
+      ).map((r) => r.issueId);
+      if (withLabelIds.length === 0) {
+        return c.json({ data: [], totalCount: 0 });
+      }
+      conditions.push(inArray(issueTable.id, withLabelIds));
+    }
+
+    const whereClause = and(...conditions);
+
+    const countRows = await db
+      .select({ value: sql<number>`count(*)::int` })
+      .from(issueTable)
+      .where(whereClause);
+    const totalCount = Number(countRows[0]?.value ?? 0);
+
+    const sortKey = q.sort?.split(":")[0];
+    const sortDir = q.sort?.endsWith(":desc");
+    const orderBy =
+      sortKey === "createdAt"
+        ? [sortDir ? desc(issueTable.createdAt) : asc(issueTable.createdAt)]
+        : sortKey === "title"
+          ? [sortDir ? desc(issueTable.title) : asc(issueTable.title)]
+          : sortKey === "status"
+            ? [sortDir ? desc(issueTable.status) : asc(issueTable.status)]
+            : sortKey === "priority"
+              ? [sortDir ? desc(issueTable.priority) : asc(issueTable.priority)]
+              : sortKey === "dueDate"
+                ? [sortDir ? desc(issueTable.dueDate) : asc(issueTable.dueDate)]
+                : [asc(issueTable.position), asc(issueTable.createdAt)];
+
+    const issues = await db
       .select()
       .from(issueTable)
-      .where(and(...conditions))
-      .orderBy(asc(issueTable.position), asc(issueTable.createdAt));
-    if (labelIds?.length) {
-      const withLabels = (
-        await db
-          .select({ issueId: issueLabelTable.issueId })
-          .from(issueLabelTable)
-          .where(inArray(issueLabelTable.labelId, labelIds))
-      ).map((r) => r.issueId);
-      issues = issues.filter((i) => withLabels.includes(i.id));
-    }
-    return c.json(issues.map(serializeIssue));
+      .where(whereClause)
+      .orderBy(...orderBy)
+      .limit(q.perPage)
+      .offset((q.page - 1) * q.perPage);
+
+    return c.json({
+      data: issues.map(serializeIssue),
+      totalCount,
+    });
   })
   .openapi(routeCreateIssue, async (c) => {
     const { orgId, teamId } = c.req.valid("param");

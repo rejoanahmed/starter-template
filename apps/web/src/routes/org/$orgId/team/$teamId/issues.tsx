@@ -1,7 +1,9 @@
 import { Add01Icon } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
 import { Badge } from "@starter/ui/components/badge";
-import { Button } from "@starter/ui/components/button";
+import { DataTable } from "@starter/ui/components/data-table/data-table";
+import { DataTableColumnHeader } from "@starter/ui/components/data-table/data-table-column-header";
+import { DataTableToolbar } from "@starter/ui/components/data-table/data-table-toolbar";
 import {
   Dialog,
   DialogContent,
@@ -9,28 +11,29 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@starter/ui/components/dialog";
-import { Input } from "@starter/ui/components/input";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@starter/ui/components/select";
 import { Skeleton } from "@starter/ui/components/skeleton";
-import { Textarea } from "@starter/ui/components/textarea";
+import { useDataTable } from "@starter/ui/hooks/use-data-table";
+import { getSortingStateParser } from "@starter/ui/lib/parsers";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { createFileRoute, useNavigate } from "@tanstack/react-router";
+import { createFileRoute } from "@tanstack/react-router";
+import type { ColumnDef } from "@tanstack/react-table";
+import {
+  CreateIssueForm,
+  type CreateIssuePayload,
+  type IssuePriority,
+  type IssueStatus,
+} from "@web/components/create-issue-form";
 import { api } from "@web/lib/api-client";
-import { useState } from "react";
-import { toast } from "sonner";
 
-type TeamIssuesGetOpts = Parameters<
-  (typeof api.todos)[":orgId"]["team"][":teamId"]["issues"]["$get"]
->[0];
-type TeamIssuesPostOpts = Parameters<
-  (typeof api.todos)[":orgId"]["team"][":teamId"]["issues"]["$post"]
->[0];
+import {
+  parseAsArrayOf,
+  parseAsInteger,
+  parseAsString,
+  useQueryState,
+  useQueryStates,
+} from "nuqs";
+import { useMemo, useState } from "react";
+import { toast } from "sonner";
 
 type Issue = {
   id: string;
@@ -44,50 +47,167 @@ type Issue = {
   createdAt: string;
 };
 
+const ISSUE_TABLE_KEYS = {
+  page: "page",
+  perPage: "perPage",
+  sort: "sort",
+} as const;
+const SORT_COLUMN_IDS = new Set([
+  "title",
+  "status",
+  "priority",
+  "dueDate",
+  "createdAt",
+]);
+
+const columns: ColumnDef<Issue>[] = [
+  {
+    id: "title",
+    accessorKey: "title",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} label="Title" />
+    ),
+    cell: ({ row }) => (
+      <span className="font-medium">{row.original.title}</span>
+    ),
+    enableSorting: true,
+  },
+  {
+    id: "status",
+    accessorKey: "status",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} label="Status" />
+    ),
+    cell: ({ row }) => <Badge variant="secondary">{row.original.status}</Badge>,
+    enableSorting: true,
+    enableColumnFilter: true,
+    meta: {
+      options: [
+        { label: "Todo", value: "todo" },
+        { label: "In Progress", value: "in_progress" },
+        { label: "Done", value: "done" },
+      ],
+    },
+  },
+  {
+    id: "priority",
+    accessorKey: "priority",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} label="Priority" />
+    ),
+    cell: ({ row }) => (
+      <span className="text-muted-foreground">{row.original.priority}</span>
+    ),
+    enableSorting: true,
+    enableColumnFilter: true,
+    meta: {
+      options: [
+        { label: "High", value: "high" },
+        { label: "Medium", value: "medium" },
+        { label: "Low", value: "low" },
+      ],
+    },
+  },
+  {
+    id: "dueDate",
+    accessorKey: "dueDate",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} label="Due" />
+    ),
+    cell: ({ row }) =>
+      row.original.dueDate
+        ? new Date(row.original.dueDate).toLocaleDateString()
+        : "—",
+    enableSorting: true,
+  },
+];
+
 export const Route = createFileRoute("/org/$orgId/team/$teamId/issues")({
   component: TeamIssuesPage,
-  validateSearch: (s: Record<string, unknown>) => ({
-    search: (s.search as string) || "",
-    status: (s.status as string) || "",
-    priority: (s.priority as string) || "",
-  }),
 });
 
 function TeamIssuesPage() {
   const { orgId, teamId } = Route.useParams();
-  const { search, status, priority } = Route.useSearch();
-  const navigate = useNavigate({ from: "/org/$orgId/team/$teamId/issues" });
   const queryClient = useQueryClient();
   const [newIssueOpen, setNewIssueOpen] = useState(false);
 
-  const { data: issues = [], isLoading } = useQuery({
-    queryKey: ["team-issues", orgId, teamId, search, status, priority],
+  const [page] = useQueryState(
+    ISSUE_TABLE_KEYS.page,
+    parseAsInteger.withDefault(1)
+  );
+  const [perPage] = useQueryState(
+    ISSUE_TABLE_KEYS.perPage,
+    parseAsInteger.withDefault(10)
+  );
+  const [sorting] = useQueryState(
+    ISSUE_TABLE_KEYS.sort,
+    getSortingStateParser<Issue>(SORT_COLUMN_IDS).withDefault([])
+  );
+  const [filters] = useQueryStates(
+    {
+      status: parseAsArrayOf(parseAsString, ",").withDefault([]),
+      priority: parseAsArrayOf(parseAsString, ",").withDefault([]),
+    },
+    { shallow: false }
+  );
+
+  const sortParam = useMemo(() => {
+    if (!sorting?.length) return undefined;
+    const first = sorting[0];
+    if (!first || typeof first.id !== "string") return undefined;
+    return `${first.id}:${first.desc ? "desc" : "asc"}`;
+  }, [sorting]);
+
+  const { data, isLoading } = useQuery({
+    queryKey: [
+      "team-issues",
+      orgId,
+      teamId,
+      page,
+      perPage,
+      sortParam,
+      filters.status,
+      filters.priority,
+    ],
     queryFn: async () => {
       const res = await api.todos[":orgId"].team[":teamId"].issues.$get({
         param: { orgId, teamId },
         query: {
-          search: search || undefined,
-          status: status || undefined,
-          priority: priority || undefined,
+          page,
+          perPage,
+          sort: sortParam,
+          status: (filters.status?.[0] as IssueStatus | undefined) ?? undefined,
+          priority:
+            (filters.priority?.[0] as IssuePriority | undefined) ?? undefined,
         },
-      } as TeamIssuesGetOpts);
+      });
       if (!res.ok) throw new Error("Failed to fetch issues");
-      return res.json() as Promise<Issue[]>;
+      return res.json() as unknown as Promise<{
+        data: Issue[];
+        totalCount: number;
+      }>;
     },
     enabled: !!orgId && !!teamId,
   });
 
+  const pageCount = data
+    ? Math.max(1, Math.ceil(data.totalCount / perPage))
+    : 1;
+  const tableData = data?.data ?? [];
+
+  const { table } = useDataTable<Issue>({
+    columns,
+    data: tableData,
+    pageCount,
+    queryKeys: ISSUE_TABLE_KEYS,
+  });
+
   const createMutation = useMutation({
-    mutationFn: async (body: {
-      title: string;
-      description?: string;
-      status?: string;
-      priority?: string;
-    }) => {
+    mutationFn: async (body: CreateIssuePayload) => {
       const res = await api.todos[":orgId"].team[":teamId"].issues.$post({
         param: { orgId, teamId },
         json: body,
-      } as TeamIssuesPostOpts);
+      });
       if (!res.ok) {
         const err = await res.json().catch(() => ({}));
         throw new Error(
@@ -127,247 +247,24 @@ function TeamIssuesPage() {
             <HugeiconsIcon className="size-4" icon={Add01Icon} />
             New issue
           </DialogTrigger>
-          <DialogContent className="sm:max-w-md">
+          <DialogContent className="sm:max-w-lg">
             <DialogHeader>
               <DialogTitle>New issue</DialogTitle>
             </DialogHeader>
-            <NewIssueForm
+            <CreateIssueForm
               isSubmitting={createMutation.isPending}
               onCancel={() => setNewIssueOpen(false)}
               onSubmit={(v) => createMutation.mutate(v)}
+              orgId={orgId}
+              teamId={teamId}
             />
           </DialogContent>
         </Dialog>
       </div>
 
-      <div className="flex flex-wrap gap-2 mb-4">
-        <Input
-          className="max-w-xs"
-          defaultValue={search}
-          onBlur={(e) => {
-            const v = e.target.value?.trim();
-            navigate({
-              search: (prev) => ({ ...prev, search: v || "" }),
-              replace: true,
-            });
-          }}
-          onKeyDown={(e) => {
-            if (e.key === "Enter") {
-              const v = (e.target as HTMLInputElement).value?.trim();
-              navigate({
-                search: (prev) => ({ ...prev, search: v || "" }),
-                replace: true,
-              });
-            }
-          }}
-          placeholder="Search issues..."
-        />
-        <Select
-          onValueChange={(v) =>
-            navigate({
-              search: (prev) => ({
-                ...prev,
-                status: (v === "all" ? "" : v) ?? "",
-              }),
-              replace: true,
-            })
-          }
-          value={status || "all"}
-        >
-          <SelectTrigger className="w-[140px]">
-            <SelectValue placeholder="Status" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="all">All statuses</SelectItem>
-            <SelectItem value="todo">Todo</SelectItem>
-            <SelectItem value="in_progress">In Progress</SelectItem>
-            <SelectItem value="done">Done</SelectItem>
-          </SelectContent>
-        </Select>
-        <Select
-          onValueChange={(v) =>
-            navigate({
-              search: (prev) => ({
-                ...prev,
-                priority: (v === "all" ? "" : v) ?? "",
-              }),
-              replace: true,
-            })
-          }
-          value={priority || "all"}
-        >
-          <SelectTrigger className="w-[140px]">
-            <SelectValue placeholder="Priority" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="all">All priorities</SelectItem>
-            <SelectItem value="high">High</SelectItem>
-            <SelectItem value="medium">Medium</SelectItem>
-            <SelectItem value="low">Low</SelectItem>
-          </SelectContent>
-        </Select>
-      </div>
-
-      {issues.length === 0 ? (
-        <div className="rounded-lg border p-8 text-center text-muted-foreground">
-          No issues match your filters.
-        </div>
-      ) : (
-        <div className="rounded-lg border overflow-hidden">
-          <table className="w-full text-sm">
-            <thead className="bg-muted/50">
-              <tr>
-                <th className="text-left font-medium p-3">Title</th>
-                <th className="text-left font-medium p-3">Status</th>
-                <th className="text-left font-medium p-3">Priority</th>
-                <th className="text-left font-medium p-3">Due</th>
-              </tr>
-            </thead>
-            <tbody>
-              {issues.map((issue) => (
-                <tr className="border-t hover:bg-muted/30" key={issue.id}>
-                  <td className="p-3 font-medium">{issue.title}</td>
-                  <td className="p-3">
-                    <Badge variant="secondary">{issue.status}</Badge>
-                  </td>
-                  <td className="p-3 text-muted-foreground">
-                    {issue.priority}
-                  </td>
-                  <td className="p-3 text-muted-foreground">
-                    {issue.dueDate
-                      ? new Date(issue.dueDate).toLocaleDateString()
-                      : "—"}
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      )}
+      <DataTable table={table}>
+        <DataTableToolbar table={table} />
+      </DataTable>
     </div>
-  );
-}
-
-function NewIssueForm({
-  onSubmit,
-  onCancel,
-  isSubmitting,
-}: {
-  onSubmit: (v: {
-    title: string;
-    description?: string;
-    status?: string;
-    priority?: string;
-  }) => void;
-  onCancel: () => void;
-  isSubmitting: boolean;
-}) {
-  const [title, setTitle] = useState("");
-  const [description, setDescription] = useState("");
-  const [status, setStatus] = useState("todo");
-  const [priority, setPriority] = useState("medium");
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!title.trim()) {
-      toast.error("Title is required");
-      return;
-    }
-    onSubmit({
-      title: title.trim(),
-      description: description.trim() || undefined,
-      status,
-      priority,
-    });
-  };
-
-  return (
-    <form className="mt-6 space-y-4" onSubmit={handleSubmit}>
-      <div>
-        <label
-          className="text-sm font-medium mb-1.5 block"
-          htmlFor="new-issue-title"
-        >
-          Title
-        </label>
-        <Input
-          id="new-issue-title"
-          onChange={(e) => setTitle(e.target.value)}
-          placeholder="Issue title"
-          required
-          value={title}
-        />
-      </div>
-      <div>
-        <label
-          className="text-sm font-medium mb-1.5 block"
-          htmlFor="new-issue-desc"
-        >
-          Description
-        </label>
-        <Textarea
-          className="resize-none"
-          id="new-issue-desc"
-          onChange={(e) => setDescription(e.target.value)}
-          placeholder="Optional description"
-          rows={3}
-          value={description}
-        />
-      </div>
-      <div className="grid grid-cols-2 gap-4">
-        <div>
-          <span
-            className="text-sm font-medium mb-1.5 block"
-            id="new-issue-status-label"
-          >
-            Status
-          </span>
-          <Select
-            aria-labelledby="new-issue-status-label"
-            onValueChange={(v) => setStatus(v || "todo")}
-            value={status}
-          >
-            <SelectTrigger>
-              <SelectValue />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="todo">Todo</SelectItem>
-              <SelectItem value="in_progress">In Progress</SelectItem>
-              <SelectItem value="done">Done</SelectItem>
-            </SelectContent>
-          </Select>
-        </div>
-        <div>
-          <span
-            className="text-sm font-medium mb-1.5 block"
-            id="new-issue-priority-label"
-          >
-            Priority
-          </span>
-          <Select
-            aria-labelledby="new-issue-priority-label"
-            onValueChange={(v) => setPriority(v || "medium")}
-            value={priority}
-          >
-            <SelectTrigger>
-              <SelectValue />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="high">High</SelectItem>
-              <SelectItem value="medium">Medium</SelectItem>
-              <SelectItem value="low">Low</SelectItem>
-            </SelectContent>
-          </Select>
-        </div>
-      </div>
-      <div className="flex gap-2 pt-4">
-        <Button disabled={isSubmitting} type="submit">
-          {isSubmitting ? "Creating…" : "Create issue"}
-        </Button>
-        <Button onClick={onCancel} type="button" variant="outline">
-          Cancel
-        </Button>
-      </div>
-    </form>
   );
 }
