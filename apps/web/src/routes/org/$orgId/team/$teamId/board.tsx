@@ -1,9 +1,11 @@
+import { Menu01Icon } from "@hugeicons/core-free-icons";
+import { HugeiconsIcon } from "@hugeicons/react";
 import { Badge } from "@starter/ui/components/badge";
-import { Card, CardContent, CardHeader } from "@starter/ui/components/card";
 import {
   Kanban,
   KanbanBoard,
   KanbanColumn,
+  KanbanColumnHandle,
   KanbanItem,
   KanbanOverlay,
 } from "@starter/ui/components/kanban";
@@ -54,19 +56,34 @@ function toColumns(issues: Issue[]): ColumnsValue {
 
 function IssueCardContent({ issue }: { issue: Issue }) {
   return (
-    <Card className="w-72 shrink-0">
-      <CardHeader className="py-2 px-3">
+    <div className="rounded-md border bg-card p-3 shadow-xs">
+      <div className="flex flex-col gap-2">
         <div className="flex items-center justify-between gap-2">
-          <span className="font-medium truncate">{issue.title}</span>
-          <Badge variant="secondary">{issue.priority}</Badge>
+          <span className="line-clamp-1 font-medium text-sm">
+            {issue.title}
+          </span>
+          <Badge
+            className="pointer-events-none h-5 rounded-sm px-1.5 text-[11px] capitalize"
+            variant={
+              issue.priority === "high"
+                ? "destructive"
+                : issue.priority === "medium"
+                  ? "default"
+                  : "secondary"
+            }
+          >
+            {issue.priority}
+          </Badge>
         </div>
-      </CardHeader>
-      {issue.dueDate && (
-        <CardContent className="py-0 px-3 text-muted-foreground text-xs pb-2">
-          Due {new Date(issue.dueDate).toLocaleDateString()}
-        </CardContent>
-      )}
-    </Card>
+        <div className="flex items-center justify-between text-muted-foreground text-xs">
+          {issue.dueDate && (
+            <time className="text-[10px] tabular-nums">
+              {new Date(issue.dueDate).toLocaleDateString()}
+            </time>
+          )}
+        </div>
+      </div>
+    </div>
   );
 }
 
@@ -79,7 +96,7 @@ function TeamBoardPage() {
     queryFn: async () => {
       const res = await api.todos[":orgId"].team[":teamId"].issues.$get({
         param: { orgId, teamId },
-        query: { page: 1, perPage: 500 },
+        query: { page: 1, perPage: 100 },
       });
       if (!res.ok) throw new Error("Failed to fetch issues");
       const json = (await res.json()) as { data: Issue[]; totalCount: number };
@@ -88,7 +105,7 @@ function TeamBoardPage() {
     enabled: !!orgId && !!teamId,
   });
 
-  const issues = data ?? [];
+  const issues = useMemo(() => data ?? [], [data]);
   const serverColumns = useMemo(() => toColumns(issues), [issues]);
   const [columns, setColumns] = useState<ColumnsValue>(serverColumns);
   const serverColumnsRef = useRef(serverColumns);
@@ -97,6 +114,12 @@ function TeamBoardPage() {
   useEffect(() => {
     setColumns(serverColumns);
   }, [serverColumns]);
+
+  // Use server data when we have it but local state is still empty (avoids one-render empty flash)
+  const displayColumns =
+    issues.length > 0 && STATUSES.every((s) => !columns[s]?.length)
+      ? serverColumns
+      : columns;
 
   const patchMutation = useMutation({
     mutationFn: async ({
@@ -129,7 +152,7 @@ function TeamBoardPage() {
   const handleValueChange = (next: Record<string, Issue[]>) => {
     setColumns(next as ColumnsValue);
     const prevIds = new Map<string, string>();
-    for (const [col, items] of Object.entries(columns)) {
+    for (const [col, items] of Object.entries(displayColumns)) {
       for (const i of items) prevIds.set(i.id, col);
     }
     for (const [col, items] of Object.entries(next)) {
@@ -148,14 +171,16 @@ function TeamBoardPage() {
 
   const value = useMemo(
     () =>
-      Object.fromEntries(STATUSES.map((s) => [s, columns[s] ?? []])) as Record<
-        string,
-        Issue[]
-      >,
-    [columns]
+      Object.fromEntries(
+        STATUSES.map((s) => [s, displayColumns[s] ?? []])
+      ) as Record<string, Issue[]>,
+    [displayColumns]
   );
 
-  const allIssues = useMemo(() => Object.values(columns).flat(), [columns]);
+  const allIssues = useMemo(
+    () => Object.values(displayColumns).flat(),
+    [displayColumns]
+  );
 
   if (isLoading) {
     return (
@@ -178,21 +203,39 @@ function TeamBoardPage() {
         onValueChange={handleValueChange}
         value={value}
       >
-        <KanbanBoard className="min-h-[320px] overflow-x-auto pb-4">
+        <KanbanBoard className="grid min-h-[320px] auto-rows-fr overflow-x-auto pb-4 sm:grid-cols-3">
           {STATUSES.map((status) => (
             <KanbanColumn
               className="min-w-[288px] min-h-[320px]"
               key={status}
               value={status}
             >
-              <h2 className="mb-2 px-1 font-semibold text-sm">
-                {COLUMN_TITLES[status]}
-              </h2>
-              {(columns[status] ?? []).map((issue) => (
-                <KanbanItem asHandle key={issue.id} value={issue.id}>
-                  <IssueCardContent issue={issue} />
-                </KanbanItem>
-              ))}
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <span className="font-semibold text-sm">
+                    {COLUMN_TITLES[status]}
+                  </span>
+                  <Badge
+                    className="pointer-events-none rounded-sm"
+                    variant="secondary"
+                  >
+                    {(displayColumns[status] ?? []).length}
+                  </Badge>
+                </div>
+                <KanbanColumnHandle
+                  aria-label={`Drag to reorder ${COLUMN_TITLES[status]} column`}
+                  className="size-8 rounded-md p-0"
+                >
+                  <HugeiconsIcon className="size-4" icon={Menu01Icon} />
+                </KanbanColumnHandle>
+              </div>
+              <div className="flex flex-col gap-2 p-0.5">
+                {(displayColumns[status] ?? []).map((issue) => (
+                  <KanbanItem asHandle key={issue.id} value={issue.id}>
+                    <IssueCardContent issue={issue} />
+                  </KanbanItem>
+                ))}
+              </div>
             </KanbanColumn>
           ))}
         </KanbanBoard>
