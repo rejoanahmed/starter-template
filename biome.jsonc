@@ -35,6 +35,12 @@
         "noForEach": "off"
       },
       "style": {
+        "useConsistentTypeDefinitions": {
+          "level": "warn",
+          "options": {
+            "style": "type"
+          }
+        },
         "useFilenamingConvention": "off",
         "noNestedTernary": "off",
         "noParameterAssign": "off",

@@ -1,3 +1,12 @@
+import {
+  Globe,
+  Heart,
+  Logout01Icon,
+  Menu01Icon,
+  Search01Icon,
+  User02Icon,
+} from "@hugeicons/core-free-icons";
+import { HugeiconsIcon } from "@hugeicons/react";
 import { Button } from "@starter/ui/components/button";
 import {
   DropdownMenu,
@@ -12,7 +21,6 @@ import { Link, useRouter } from "@tanstack/react-router";
 import { Image } from "@unpic/react";
 import { authClient } from "@web/lib/auth-client";
 import i18n from "@web/lib/i18n";
-import { Globe, Heart, LogOut, Menu, Search, User } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 
@@ -62,7 +70,7 @@ export default function Header() {
         <DropdownMenu>
           <DropdownMenuTrigger>
             <Button aria-label="Language" size="icon" variant="ghost">
-              <Globe size={20} />
+              <HugeiconsIcon icon={Globe} size={20} />
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
@@ -98,20 +106,20 @@ export default function Header() {
                   width={32}
                 />
               ) : (
-                <Menu size={20} />
+                <HugeiconsIcon icon={Menu01Icon} size={20} />
               )}
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end" className="w-56">
             <DropdownMenuItem>
               <Link className="flex items-center gap-2" to="/">
-                <Search size={16} />
+                <HugeiconsIcon icon={Search01Icon} size={16} />
                 <span>{t("header.explore")}</span>
               </Link>
             </DropdownMenuItem>
             <DropdownMenuItem>
               <a className="flex items-center gap-2" href="/wishlists">
-                <Heart size={16} />
+                <HugeiconsIcon icon={Heart} size={16} />
                 <span>{t("header.wishlists")}</span>
               </a>
             </DropdownMenuItem>
@@ -131,13 +139,13 @@ export default function Header() {
                 className="flex items-center gap-2 text-red-600 focus:text-red-600 focus:bg-red-50"
                 onClick={handleLogout}
               >
-                <LogOut size={16} />
+                <HugeiconsIcon icon={Logout01Icon} size={16} />
                 <span>{t("header.logOut")}</span>
               </DropdownMenuItem>
             ) : (
               <DropdownMenuItem>
                 <Link className="flex items-center gap-2" to="/">
-                  <User size={16} />
+                  <HugeiconsIcon icon={User02Icon} size={16} />
                   <span>{t("header.logIn")}</span>
                 </Link>
               </DropdownMenuItem>

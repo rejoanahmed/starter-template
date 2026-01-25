@@ -1,4 +1,4 @@
-import { expo } from "@better-auth/expo";
+// import { expo } from "@better-auth/expo";
 import type { DB } from "@starter/db";
 import * as schema from "@starter/db/schema/auth";
 import { type BetterAuthPlugin, betterAuth } from "better-auth";
@@ -45,7 +45,7 @@ export type AuthConfig = {
  */
 export function createAuth(config: AuthConfig) {
   // Define plugin types to avoid TypeScript serialization issues
-  const expoPlugin = expo();
+  // const expoPlugin = expo();
   const twoFactorPlugin = twoFactor();
   const phoneNumberPlugin = phoneNumber({
     sendOTP: config.phoneNumber.sendOTP,
@@ -88,7 +88,7 @@ export function createAuth(config: AuthConfig) {
   // });
 
   type AuthPlugins = [
-    typeof expoPlugin,
+    // typeof expoPlugin,
     typeof twoFactorPlugin,
     typeof phoneNumberPlugin,
     typeof emailOTPPlugin,
@@ -99,7 +99,7 @@ export function createAuth(config: AuthConfig) {
   ];
 
   const authPlugins: AuthPlugins = [
-    expoPlugin,
+    // expoPlugin,
     twoFactorPlugin,
     phoneNumberPlugin,
     emailOTPPlugin,

@@ -3,9 +3,6 @@ import type { AppBindings } from "@api/lib/types";
 import { Hono } from "hono";
 import { cors } from "hono/cors";
 import { getDb } from "./lib/db";
-import bookingsRouter from "./routes/bookings";
-import roomsRouter from "./routes/merchant/rooms";
-import stripeRouter from "./routes/stripe";
 
 const app = new Hono<AppBindings>();
 const route = app
@@ -95,9 +92,7 @@ const route = app
 
   // Mount routes - these inherit the parent middleware context
   .get("/", (c) => c.text("OK"))
-  .route("/api/stripe", stripeRouter)
-  .route("/api/bookings", bookingsRouter)
-  .route("/api/merchant/rooms", roomsRouter);
+
 
 export default app;
 export type AppType = typeof route;
