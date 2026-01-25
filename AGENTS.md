@@ -55,6 +55,12 @@ Example: `cd packages/ui && bunx --bun shadcn@latest add card`. New components a
 - Single file: `cd apps/web && vitest run path/to/test.test.ts`
 - Watch: `cd apps/web && vitest`
 
+### E2E (Playwright)
+- Run from web app: `cd apps/web && bun run test:e2e` (or `test:e2e:ui`, `test:e2e:debug`)
+- **Public (no-auth) tests** (`e2e/public.spec.ts`): need only the web app. Playwright starts it via `webServer`.
+- **Full E2E (authenticated + org/board/issues)**: the API must be running on port 3001. Start it in another terminal (`bun run dev:server` or `cd apps/api && bun run dev`), then run `cd apps/web && bun run test:e2e`. Global setup seeds a test user, org, and team in the DB; teardown removes them.
+- For CI: start the API before Playwright (e.g. same job or pre-step) if you run the authenticated project.
+
 
 
 ## Architecture Notes

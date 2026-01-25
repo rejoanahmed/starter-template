@@ -2,6 +2,7 @@ import path from "node:path";
 import type { FullConfig } from "@playwright/test";
 import dotenv from "dotenv";
 import { cleanupTestData } from "./utils/auth-setup";
+import { cleanupOrgAndTeam } from "./utils/seed-org";
 
 export default async function globalTeardown(_config: FullConfig) {
   const rootDir = path.join(process.cwd(), "../..");
@@ -16,6 +17,7 @@ export default async function globalTeardown(_config: FullConfig) {
   }
 
   console.log("Cleaning up test data...");
+  await cleanupOrgAndTeam(databaseUrl);
   await cleanupTestData(databaseUrl);
   console.log("Test data cleaned up");
 }

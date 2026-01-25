@@ -17,7 +17,15 @@ export default defineConfig({
   },
   projects: [
     {
-      name: "chromium",
+      name: "no-auth",
+      testMatch: ["**/public.spec.ts"],
+      use: {
+        ...devices["Desktop Chrome"],
+      },
+    },
+    {
+      name: "authenticated",
+      testMatch: ["**/auth.spec.ts"],
       use: {
         ...devices["Desktop Chrome"],
         storageState: "./e2e/.auth/auth.json",
