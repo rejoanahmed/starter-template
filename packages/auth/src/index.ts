@@ -183,3 +183,31 @@ export type Organization = {
   metadata?: any;
   // aditional fields if any
 };
+
+// ========================================================
+// Mock auth instance for schema generation
+// ========================================================
+// import { createDb } from "@starter/db";
+/**
+ * Mock auth instance for schema generation
+ * @returns Auth instance
+ *
+ * @example `bun run auth:generate-schema` from the root
+ */
+// mock auth instance for schema generation:
+// export const auth = createAuth({
+//   db: createDb("postgresql://postgres:postgres@localhost:5432/postgres"),
+//   baseURL: "http://localhost:3000",
+//   secret: "secret",
+//   googleClientId: "googleClientId",
+//   googleClientSecret: "googleClientSecret",
+//   trustedOrigins: ["http://localhost:3000"],
+//   plugins: [],
+//   phoneNumber: {
+//     sendOTP: () => {},
+//   },
+//   email: {
+//     sendEmailVerificationOTP: () => Promise.resolve(),
+//     sendInvitationEmail: () => Promise.resolve(),
+//   },
+// });
