@@ -15,9 +15,10 @@
     "preview": "bun run build && vite preview",
     "cf-typegen": "wrangler types",
     "postinstall": "bun run cf-typegen",
-    "type-check": "bunx tsc --noEmit"
+    "type-check": "tsc -b"
   },
   "dependencies": {
+    "api": "workspace:*",
     "@cloudflare/vite-plugin": "^1.21.2",
     "@dnd-kit/core": "^6.3.1",
     "@dnd-kit/sortable": "^10.0.0",

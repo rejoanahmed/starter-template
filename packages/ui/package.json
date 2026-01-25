@@ -10,7 +10,7 @@
     "./hooks/*": "./src/hooks/*.ts"
   },
   "scripts": {
-    "check-types": "tsc --noEmit"
+    "type-check": "tsc -b"
   },
   "devDependencies": {
     "@starter/config": "workspace:*",

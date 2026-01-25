@@ -20,5 +20,5 @@
     "strictNullChecks": true
   },
   "exclude": ["node_modules", "dist", "tests"],
-  "include": []
+  "include": ["src"]
 }

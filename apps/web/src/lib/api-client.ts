@@ -1,4 +1,4 @@
-import type { AppType } from "@api/app";
+import type { AppType } from "api";
 import { hc } from "hono/client";
 
 // Get the API URL from environment variables

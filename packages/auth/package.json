@@ -1,17 +1,26 @@
 {
   "name": "@starter/auth",
+  "type": "module",
+  "types": "./dist/index.d.mts",
   "exports": {
     ".": {
-      "default": "./src/index.ts"
+      "types": "./dist/index.d.mts",
+      "import": "./dist/index.mjs",
+      "default": "./dist/index.mjs"
     },
-    "./*": {
-      "default": "./src/*.ts"
+    "./client-web": {
+      "types": "./dist/client-web.d.mts",
+      "import": "./dist/client-web.mjs",
+      "default": "./dist/client-web.mjs"
     }
   },
-  "type": "module",
-  "scripts": {},
+  "scripts": {
+    "build": "tsdown",
+    "type-check": "tsc -b"
+  },
   "devDependencies": {
-    "@starter/config": "workspace:*"
+    "@starter/config": "workspace:*",
+    "tsdown": "0.20.1"
   },
   "peerDependencies": {
     "typescript": "5.9.3"

@@ -2,11 +2,19 @@
   "name": "api",
   "version": "1.0.0",
   "private": true,
+  "types": "./dist/export-types.d.mts",
+  "exports": {
+    ".": {
+      "types": "./dist/export-types.d.mts",
+      "import": "./dist/export-types.mjs",
+      "default": "./dist/export-types.mjs"
+    }
+  },
   "scripts": {
     "dev": "bunx wrangler dev --port 3001 --ip 0.0.0.0",
-    "build": "bunx tsc --noEmit",
+    "build": "tsdown",
     "deploy": "bunx wrangler deploy --minify",
-    "type-check": "bunx tsc --noEmit",
+    "type-check": "tsc -b",
     "cf-typegen": "bunx wrangler types --env-interface CloudflareBindings",
     "db:push": "drizzle-kit push",
     "db:generate": "drizzle-kit generate",
@@ -30,6 +38,7 @@
     "zod": "^4.3.6"
   },
   "devDependencies": {
+    "tsdown": "^0.20.1",
     "@cloudflare/workers-types": "^4.20260123.0",
     "@types/node": "^25.0.10",
     "@types/pg": "^8.16.0",
