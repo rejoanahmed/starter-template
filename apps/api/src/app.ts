@@ -1,4 +1,4 @@
-import { auth } from "@api/lib/auth";
+import { getAuth } from "@api/lib/auth";
 import type { AppBindings } from "@api/lib/types";
 import { Hono } from "hono";
 import { cors } from "hono/cors";
@@ -47,7 +47,7 @@ const route = app
     }
     c.set("db", getDb(c.env));
 
-    const authInstance = auth(c.env, c.get("db"));
+    const authInstance = getAuth(c.env, c.get("db"));
     c.set("auth", authInstance);
 
     try {
@@ -81,18 +81,19 @@ const route = app
       });
       c.set("user", null);
       c.set("session", null);
-      c.set("auth", auth(c.env, c.get("db")));
+      c.set("auth", getAuth(c.env, c.get("db")));
       return next();
     }
   })
 
   // Mount Better Auth handler - following Better Auth on Cloudflare guide
   // This handles all /api/auth/* routes
-  .on(["GET", "POST"], "/api/auth/*", (c) => auth(c.env, c.get("db")).handler(c.req.raw))
+  .on(["GET", "POST"], "/api/auth/*", (c) =>
+    getAuth(c.env, c.get("db")).handler(c.req.raw)
+  )
 
   // Mount routes - these inherit the parent middleware context
-  .get("/", (c) => c.text("OK"))
-
+  .get("/", (c) => c.text("OK"));
 
 export default app;
 export type AppType = typeof route;
