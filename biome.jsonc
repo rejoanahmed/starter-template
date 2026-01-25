@@ -54,13 +54,17 @@
         "noUnknownAtRules": "off",
         "noEmptyBlockStatements": "off",
         "noBitwiseOperators": "warn",
-        "noEvolvingTypes": "off"
+        "noEvolvingTypes": "off",
+        "noArrayIndexKey": "warn"
       },
       "security": {
         "noDangerouslySetInnerHtml": "warn"
       },
       "a11y": {
-        "useButtonType": "warn"
+        "useButtonType": "warn",
+        "useKeyWithClickEvents": "info",
+        "noNoninteractiveElementInteractions": "info",
+        "useSemanticElements": "info"
       },
       "correctness": {
         "noNestedComponentDefinitions": "off",

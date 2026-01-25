@@ -90,9 +90,7 @@ export function NoOrgShell({ children }: { children: React.ReactNode }) {
                   <CreateOrgForm
                     isPending={createOrg.isPending}
                     onOpenChange={setCreateOpen}
-                    onSubmit={(name, slug) =>
-                      createOrg.mutate({ name, slug })
-                    }
+                    onSubmit={(name, slug) => createOrg.mutate({ name, slug })}
                     open={createOpen}
                   />
                 </SidebarMenuItem>

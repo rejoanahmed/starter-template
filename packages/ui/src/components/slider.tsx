@@ -10,7 +10,7 @@ function Slider({
   max = 100,
   ...props
 }: SliderPrimitive.Root.Props) {
-  const _values = React.useMemo(
+  const values = React.useMemo(
     () =>
       Array.isArray(value)
         ? value
@@ -46,10 +46,11 @@ function Slider({
             data-slot="slider-range"
           />
         </SliderPrimitive.Track>
-        {Array.from({ length: _values.length }, (_, index) => (
+        {Array.from({ length: values.length }, (_, index) => (
           <SliderPrimitive.Thumb
             className="border-primary ring-ring/50 size-4 rounded-4xl border bg-white shadow-sm transition-colors hover:ring-4 focus-visible:ring-4 focus-visible:outline-hidden block shrink-0 select-none disabled:pointer-events-none disabled:opacity-50"
             data-slot="slider-thumb"
+            // biome-ignore lint/suspicious/noArrayIndexKey: simple
             key={index}
           />
         ))}

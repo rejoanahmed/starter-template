@@ -62,22 +62,30 @@ function InputOTPSlot({
       {char}
       {hasFakeCaret && (
         <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
-          <div className="animate-caret-blink bg-foreground h-4 w-px duration-1000 bg-foreground h-4 w-px" />
+          <div className="animate-caret-blink bg-foreground h-4 w-px duration-1000" />
         </div>
       )}
     </div>
   );
 }
 
-function InputOTPSeparator({ ...props }: React.ComponentProps<"div">) {
+function InputOTPSeparator({
+  className,
+  ...props
+}: React.ComponentProps<"div">) {
   return (
     <div
-      className="[&_svg:not([class*='size-'])]:size-4 flex items-center"
+      className={cn(
+        "[&_svg:not([class*='size-'])]:size-4 flex items-center",
+        className
+      )}
       data-slot="input-otp-separator"
-      role="separator"
       {...props}
     >
-      <HugeiconsIcon icon={MinusSignIcon} strokeWidth={2} />
+      <hr className="sr-only" />
+      <span aria-hidden="true">
+        <HugeiconsIcon icon={MinusSignIcon} strokeWidth={2} />
+      </span>
     </div>
   );
 }

@@ -1,7 +1,4 @@
-export async function sendNewListingEmail(
-  roomName: string,
-  roomAddress: string
-) {
+export function sendNewListingEmail(roomName: string, roomAddress: string) {
   try {
     const emailTo = "rejoanahmed8@gmail.com";
     const subject = `New Room Listing Created: ${roomName}`;
