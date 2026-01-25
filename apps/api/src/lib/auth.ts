@@ -11,8 +11,8 @@ export const getAuth = (env: AppBindings["Bindings"], db: DB) => {
     db,
     baseURL: env.BETTER_AUTH_URL,
     secret: env.BETTER_AUTH_SECRET,
-    googleClientId: env.GOOGLE_CLIENT_ID,
-    googleClientSecret: env.GOOGLE_CLIENT_SECRET,
+    googleClientId: "",
+    googleClientSecret: "",
     trustedOrigins: [
       ...(env.CORS_ORIGINS.split(",").map((o) => o.trim()) || []),
     ],
