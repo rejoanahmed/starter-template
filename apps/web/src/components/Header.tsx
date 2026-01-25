@@ -1,9 +1,7 @@
 import {
   Globe,
-  Heart,
   Logout01Icon,
   Menu01Icon,
-  Search01Icon,
   User02Icon,
 } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
@@ -12,7 +10,6 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@starter/ui/components/dropdown-menu";
 import { cn } from "@starter/ui/lib/utils";
@@ -62,17 +59,24 @@ export default function Header() {
   };
 
   return (
-    <header className="hidden lg:flex px-6 py-4 items-center justify-between bg-white text-gray-900 shadow-sm border-b border-gray-200">
+    <header className="flex px-6 py-4 items-center justify-between bg-white text-gray-900 shadow-sm border-b border-gray-200">
       <Link className="text-2xl font-bold text-red-600" to="/">
         {t("name")}
       </Link>
       <div className="flex items-center gap-4">
         <DropdownMenu>
-          <DropdownMenuTrigger>
-            <Button aria-label="Language" size="icon" variant="ghost">
-              <HugeiconsIcon icon={Globe} size={20} />
-            </Button>
-          </DropdownMenuTrigger>
+          <DropdownMenuTrigger
+            render={(props) => (
+              <Button
+                {...props}
+                aria-label="Language"
+                size="icon"
+                variant="ghost"
+              >
+                <HugeiconsIcon icon={Globe} size={20} />
+              </Button>
+            )}
+          />
           <DropdownMenuContent align="end">
             {languages.map((lang) => (
               <DropdownMenuItem
@@ -90,63 +94,43 @@ export default function Header() {
           </DropdownMenuContent>
         </DropdownMenu>
         <DropdownMenu>
-          <DropdownMenuTrigger>
-            <Button
-              aria-label={isAuthenticated ? t("header.userMenu") : "Menu"}
-              className="rounded-full"
-              size="icon"
-              variant="ghost"
-            >
-              {isAuthenticated && user?.image ? (
-                <Image
-                  alt={user.name || "User"}
-                  className="size-8 rounded-full object-cover"
-                  height={32}
-                  src={user.image}
-                  width={32}
-                />
-              ) : (
-                <HugeiconsIcon icon={Menu01Icon} size={20} />
-              )}
-            </Button>
-          </DropdownMenuTrigger>
+          <DropdownMenuTrigger
+            render={(props) => (
+              <Button
+                {...props}
+                aria-label={isAuthenticated ? t("nav.userMenu") : "Menu"}
+                className="rounded-full"
+                size="icon"
+                variant="ghost"
+              >
+                {isAuthenticated && user?.image ? (
+                  <Image
+                    alt={user.name || "User"}
+                    className="size-8 rounded-full object-cover"
+                    height={32}
+                    src={user.image}
+                    width={32}
+                  />
+                ) : (
+                  <HugeiconsIcon icon={Menu01Icon} size={20} />
+                )}
+              </Button>
+            )}
+          />
           <DropdownMenuContent align="end" className="w-56">
-            <DropdownMenuItem>
-              <Link className="flex items-center gap-2" to="/">
-                <HugeiconsIcon icon={Search01Icon} size={16} />
-                <span>{t("header.explore")}</span>
-              </Link>
-            </DropdownMenuItem>
-            <DropdownMenuItem>
-              <a className="flex items-center gap-2" href="/wishlists">
-                <HugeiconsIcon icon={Heart} size={16} />
-                <span>{t("header.wishlists")}</span>
-              </a>
-            </DropdownMenuItem>
-            <DropdownMenuItem>
-              <Link className="flex items-center gap-2" to="/">
-                <span>{t("header.listYourSpace")}</span>
-              </Link>
-            </DropdownMenuItem>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem>
-              <a className="flex items-center gap-2" href="/help">
-                <span>{t("header.help")}</span>
-              </a>
-            </DropdownMenuItem>
             {isAuthenticated ? (
               <DropdownMenuItem
                 className="flex items-center gap-2 text-red-600 focus:text-red-600 focus:bg-red-50"
                 onClick={handleLogout}
               >
                 <HugeiconsIcon icon={Logout01Icon} size={16} />
-                <span>{t("header.logOut")}</span>
+                <span>{t("nav.logOut")}</span>
               </DropdownMenuItem>
             ) : (
               <DropdownMenuItem>
-                <Link className="flex items-center gap-2" to="/">
+                <Link className="flex items-center gap-2" to="/login">
                   <HugeiconsIcon icon={User02Icon} size={16} />
-                  <span>{t("header.logIn")}</span>
+                  <span>{t("nav.logIn")}</span>
                 </Link>
               </DropdownMenuItem>
             )}

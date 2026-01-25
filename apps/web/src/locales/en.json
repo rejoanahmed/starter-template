@@ -1,55 +1,8 @@
 {
-  "name": "Spotfinder",
-  "header": {
-    "explore": "Explore",
-    "wishlists": "Wishlists",
-    "listYourSpace": "List your space",
-    "help": "Help",
+  "name": "Todo App",
+  "nav": {
     "logIn": "Log in",
     "logOut": "Log out",
     "userMenu": "User menu"
-  },
-  "mobile": {
-    "explore": "Explore",
-    "wishlists": "Wishlists",
-    "logIn": "Log in",
-    "logOut": "Log out",
-    "account": "Account"
-  },
-  "host": {
-    "navigation": {
-      "today": "Today",
-      "calendar": "Calendar",
-      "listings": "Listings",
-      "messages": "Messages"
-    },
-    "listings": {
-      "title": "Listings",
-      "addNewListing": "Add new listing",
-      "noListingsYet": "No listings yet",
-      "getStarted": "Get started by creating your first listing",
-      "createFirstListing": "Create your first listing",
-      "loading": "Loading listings...",
-      "status": {
-        "draft": "Draft",
-        "active": "Active",
-        "inactive": "Inactive"
-      },
-      "noPhotos": "No photos"
-    },
-    "createListing": {
-      "step1": {
-        "title": "Basic Information",
-        "subtitle": "Let's start with the basics"
-      },
-      "step2": {
-        "title": "Photos",
-        "subtitle": "Show guests what your space looks like"
-      },
-      "step3": {
-        "title": "Pricing",
-        "subtitle": "Set competitive prices for your space"
-      }
-    }
   }
 }
