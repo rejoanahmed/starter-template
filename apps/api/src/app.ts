@@ -2,6 +2,7 @@ import { getAuth } from "@api/lib/auth";
 import type { AppBindings } from "@api/lib/types";
 import { todosApi } from "@api/routes/todo";
 import { OpenAPIHono } from "@hono/zod-openapi";
+import { Scalar } from "@scalar/hono-api-reference";
 import { cors } from "hono/cors";
 import { getDb } from "./lib/db";
 
@@ -99,8 +100,22 @@ const route = app
 
 app.doc("/doc", {
   openapi: "3.0.0",
-  info: { title: "Starter API", version: "1.0.0" },
+  info: {
+    title: "TODO List API",
+    version: "1.0.0",
+    description:
+      "REST API for the TODO List app. TODOs are represented as **issues** in the schema. Field mapping: TODO name = `title`, description = `description`, due date = `dueDate`, status = `todo` | `in_progress` | `done` (Not Started / In Progress / Completed). List endpoints support filter params: `status`, `dueBefore`, `dueAfter`, `search`, `priority`, etc., and sort param: `sort=title|status|dueDate|createdAt:asc|desc`.",
+  },
 });
+
+app.get(
+  "/scalar",
+  Scalar(() => {
+    return {
+      url: "/doc",
+    };
+  })
+);
 
 export default app;
 export type AppType = typeof route;

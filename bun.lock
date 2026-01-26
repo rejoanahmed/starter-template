@@ -20,12 +20,12 @@
       "dependencies": {
         "@hono/zod-openapi": "^1.2.0",
         "@hono/zod-validator": "^0.7.6",
+        "@scalar/hono-api-reference": "^0.9.37",
         "@starter/auth": "workspace:*",
         "@starter/db": "workspace:*",
         "better-auth": "^1.4.17",
         "dotenv": "^17.2.3",
         "drizzle-zod": "^0.8.3",
-        "effect": "^3.19.15",
         "hono": "^4.11.5",
         "nanoid": "^5.1.6",
         "stripe": "^20.2.0",
@@ -39,6 +39,7 @@
         "tsdown": "^0.20.1",
         "tsx": "^4.21.0",
         "typescript": "^5.9.3",
+        "vitest": "^4.0.18",
         "wrangler": "^4.60.0",
       },
     },
@@ -663,6 +664,14 @@
     "@rollup/rollup-win32-x64-gnu": ["@rollup/rollup-win32-x64-gnu@4.56.0", "", { "os": "win32", "cpu": "x64" }, "sha512-FeCnkPCTHQJFbiGG49KjV5YGW/8b9rrXAM2Mz2kiIoktq2qsJxRD5giEMEOD2lPdgs72upzefaUvS+nc8E3UzQ=="],
 
     "@rollup/rollup-win32-x64-msvc": ["@rollup/rollup-win32-x64-msvc@4.56.0", "", { "os": "win32", "cpu": "x64" }, "sha512-H8AE9Ur/t0+1VXujj90w0HrSOuv0Nq9r1vSZF2t5km20NTfosQsGGUXDaKdQZzwuLts7IyL1fYT4hM95TI9c4g=="],
+
+    "@scalar/core": ["@scalar/core@0.3.34", "", { "dependencies": { "@scalar/types": "0.5.10" } }, "sha512-dZnpkrnjiPvPLa/sIdjoaxdVoYowWUqC5nCCXJI+29laMIII6dCze8ThxLPGN1b9gJ8cYcQwBrwr+RNCjqJgdQ=="],
+
+    "@scalar/helpers": ["@scalar/helpers@0.2.9", "", {}, "sha512-Y4ffJF0yELdwZ0BKgonqn3SumIgRn1WKyYCVHD+TDM7qRFChdGRypyt20+efHs26fmJeyBAIIv2laICj5uimiw=="],
+
+    "@scalar/hono-api-reference": ["@scalar/hono-api-reference@0.9.37", "", { "dependencies": { "@scalar/core": "0.3.34" }, "peerDependencies": { "hono": "^4.10.3" } }, "sha512-eprpFplQoirRmfC5fWo90jLQX5x01H7QS2XrRDmNES207eaEvtUZHyW9vPV7Bi9ltjrnqG8WK2oPMd/uZClptg=="],
+
+    "@scalar/types": ["@scalar/types@0.5.10", "", { "dependencies": { "@scalar/helpers": "0.2.9", "nanoid": "^5.1.6", "type-fest": "^5.3.1", "zod": "^4.3.5" } }, "sha512-37qAHQC2J7O+Mt8u0HOZttTQPQ1OEWKWxo9SMbahYKTosL9k1KtTG2F3EB33EkW3WqEVQitkUKrM0+MVM2HeYQ=="],
 
     "@sec-ant/readable-stream": ["@sec-ant/readable-stream@0.4.1", "", {}, "sha512-831qok9r2t8AlxLko40y2ebgSDhenenCatLVeW/uBtnHPyhHOvG0C7TvfgecV+wHzIm5KUICgzmVpWS+IMEAeg=="],
 

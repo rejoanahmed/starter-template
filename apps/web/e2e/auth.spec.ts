@@ -63,3 +63,72 @@ test("can create issue from Team Issues page", async ({ page }) => {
   ).toBeHidden();
   await expect(page.getByText(title)).toBeVisible({ timeout: 10000 });
 });
+
+test("can edit issue from Team Issues page", async ({ page }) => {
+  await page.goto(`/org/${TEST_ORG_ID}/team/${TEST_TEAM_ID}/issues`);
+
+  const title = `E2E edit-me ${Date.now()}`;
+  await page.getByRole("button", { name: /new issue/i }).click();
+  await page.getByRole("dialog").getByPlaceholder(/title/i).fill(title);
+  await page
+    .getByRole("dialog")
+    .getByRole("button", { name: /create issue/i })
+    .click();
+  await expect(page.getByRole("dialog")).toBeHidden({ timeout: 5000 });
+  await expect(page.getByText(title)).toBeVisible({ timeout: 10000 });
+
+  await page
+    .getByRole("row")
+    .filter({ hasText: title })
+    .getByRole("button", { name: /open actions/i })
+    .click();
+  await page.getByRole("menuitem", { name: /edit/i }).click();
+
+  await expect(
+    page.getByRole("dialog").getByRole("heading", { name: /edit issue/i })
+  ).toBeVisible();
+  const updatedTitle = `E2E edited ${Date.now()}`;
+  await page.getByRole("dialog").getByPlaceholder(/title/i).fill(updatedTitle);
+  await page
+    .getByRole("dialog")
+    .getByRole("button", { name: /^save$/i })
+    .click();
+
+  await expect(page.getByRole("dialog")).toBeHidden({ timeout: 5000 });
+  await expect(page.getByText(updatedTitle)).toBeVisible({ timeout: 10000 });
+  await expect(page.getByText(title)).not.toBeVisible();
+});
+
+test("can delete issue from Team Issues page", async ({ page }) => {
+  await page.goto(`/org/${TEST_ORG_ID}/team/${TEST_TEAM_ID}/issues`);
+
+  const title = `E2E delete-me ${Date.now()}`;
+  await page.getByRole("button", { name: /new issue/i }).click();
+  await page.getByRole("dialog").getByPlaceholder(/title/i).fill(title);
+  await page
+    .getByRole("dialog")
+    .getByRole("button", { name: /create issue/i })
+    .click();
+  await expect(page.getByRole("dialog")).toBeHidden({ timeout: 5000 });
+  await expect(page.getByText(title)).toBeVisible({ timeout: 10000 });
+
+  await page
+    .getByRole("row")
+    .filter({ hasText: title })
+    .getByRole("button", { name: /open actions/i })
+    .click();
+  await page.getByRole("menuitem", { name: /delete/i }).click();
+
+  await expect(
+    page.getByRole("alertdialog").getByText(/delete.*cannot be undone/i)
+  ).toBeVisible();
+  await page
+    .getByRole("alertdialog")
+    .getByRole("button", { name: /^delete$/i })
+    .click();
+
+  await expect(page.getByRole("alertdialog")).toBeHidden({ timeout: 5000 });
+  await expect(
+    page.getByRole("row").filter({ hasText: title })
+  ).not.toBeVisible({ timeout: 10000 });
+});

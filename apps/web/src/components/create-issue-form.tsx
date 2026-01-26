@@ -33,7 +33,13 @@ export type CreateIssueFormProps = {
   onSubmit: (payload: CreateIssuePayload) => void;
   onCancel: () => void;
   isSubmitting: boolean;
+  /** When set, form is in edit mode: prefill and use submitLabel. */
+  initialValue?: Partial<CreateIssuePayload>;
+  submitLabel?: string;
 };
+
+const toDateInputValue = (iso: string | null | undefined): string =>
+  iso ? new Date(iso).toISOString().slice(0, 10) : "";
 
 export function CreateIssueForm({
   orgId,
@@ -41,14 +47,28 @@ export function CreateIssueForm({
   onSubmit,
   onCancel,
   isSubmitting,
+  initialValue,
+  submitLabel = "Create issue",
 }: CreateIssueFormProps) {
-  const [title, setTitle] = useState("");
-  const [description, setDescription] = useState("");
-  const [status, setStatus] = useState<IssueStatus>("todo");
-  const [priority, setPriority] = useState<IssuePriority>("medium");
-  const [assigneeId, setAssigneeId] = useState<string | null>(null);
-  const [dueDate, setDueDate] = useState("");
-  const [labelIds, setLabelIds] = useState<string[]>([]);
+  const [title, setTitle] = useState(initialValue?.title ?? "");
+  const [description, setDescription] = useState(
+    initialValue?.description ?? ""
+  );
+  const [status, setStatus] = useState<IssueStatus>(
+    (initialValue?.status as IssueStatus) ?? "todo"
+  );
+  const [priority, setPriority] = useState<IssuePriority>(
+    (initialValue?.priority as IssuePriority) ?? "medium"
+  );
+  const [assigneeId, setAssigneeId] = useState<string | null>(
+    initialValue?.assigneeId ?? null
+  );
+  const [dueDate, setDueDate] = useState(
+    toDateInputValue(initialValue?.dueDate ?? null)
+  );
+  const [labelIds, setLabelIds] = useState<string[]>(
+    initialValue?.labelIds ?? []
+  );
 
   const { data: membersData } = useQuery({
     queryKey: ["org-members", orgId],
@@ -249,7 +269,7 @@ export function CreateIssueForm({
       )}
       <div className="flex gap-2 pt-4">
         <Button disabled={isSubmitting} type="submit">
-          {isSubmitting ? "Creating…" : "Create issue"}
+          {isSubmitting ? "Saving…" : submitLabel}
         </Button>
         <Button onClick={onCancel} type="button" variant="outline">
           Cancel
