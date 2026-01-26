@@ -84,7 +84,7 @@ jobs:
             printf 'DATABASE_URL=%s\n' "$DATABASE_URL"
             printf 'BETTER_AUTH_SECRET=%s\n' "$BETTER_AUTH_SECRET"
             printf 'BETTER_AUTH_URL=http://127.0.0.1:3001\n'
-            printf 'CORS_ORIGINS=http://127.0.0.1:3000\n'
+            printf 'CORS_ORIGINS=http://localhost:3000,http://127.0.0.1:3000\n'
             printf 'GOOGLE_CLIENT_ID=%s\n' "$GOOGLE_CLIENT_ID"
             printf 'GOOGLE_CLIENT_SECRET=%s\n' "$GOOGLE_CLIENT_SECRET"
           } > apps/api/.dev.vars
