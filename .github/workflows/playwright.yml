@@ -83,8 +83,8 @@ jobs:
             printf 'NODE_ENV=development\n'
             printf 'DATABASE_URL=%s\n' "$DATABASE_URL"
             printf 'BETTER_AUTH_SECRET=%s\n' "$BETTER_AUTH_SECRET"
-            printf 'BETTER_AUTH_URL=http://localhost:3001\n'
-            printf 'CORS_ORIGINS=http://localhost:3000,http://127.0.0.1:3000\n'
+            printf 'BETTER_AUTH_URL=http://127.0.0.1:3001\n'
+            printf 'CORS_ORIGINS=http://127.0.0.1:3000\n'
             printf 'GOOGLE_CLIENT_ID=%s\n' "$GOOGLE_CLIENT_ID"
             printf 'GOOGLE_CLIENT_SECRET=%s\n' "$GOOGLE_CLIENT_SECRET"
           } > apps/api/.dev.vars
@@ -109,8 +109,8 @@ jobs:
         env:
           DATABASE_URL: ${{ steps.create_neon_branch.outputs.db_url_pooled }}
           BETTER_AUTH_SECRET: ${{ secrets.BETTER_AUTH_SECRET }}
-          VITE_API_URL: http://localhost:3001
-          VITE_APP_URL: http://localhost:3000
+          VITE_API_URL: http://127.0.0.1:3001
+          VITE_APP_URL: http://127.0.0.1:3000
 
       - uses: actions/upload-artifact@v4
         if: ${{ !cancelled() }}

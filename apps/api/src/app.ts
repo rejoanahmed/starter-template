@@ -11,8 +11,11 @@ const route = app
   .use(
     "*",
     cors({
-      origin: (_o, c) => {
-        return c.env.CORS_ORIGINS.split(",");
+      origin: (origin, c) => {
+        const allowed = c.env.CORS_ORIGINS.split(",")
+          .map((o: string) => o.trim())
+          .filter(Boolean);
+        return origin && allowed.includes(origin) ? origin : (allowed[0] ?? "");
       },
       allowHeaders: [
         "Content-Type",
