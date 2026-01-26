@@ -109,8 +109,9 @@ jobs:
         env:
           DATABASE_URL: ${{ steps.create_neon_branch.outputs.db_url_pooled }}
           BETTER_AUTH_SECRET: ${{ secrets.BETTER_AUTH_SECRET }}
-          VITE_API_URL: http://127.0.0.1:3001
-          VITE_APP_URL: http://127.0.0.1:3000
+          # Use localhost so saved auth cookie (domain: localhost) is sent to the API
+          VITE_API_URL: http://localhost:3001
+          VITE_APP_URL: http://localhost:3000
 
       - uses: actions/upload-artifact@v4
         if: ${{ !cancelled() }}
