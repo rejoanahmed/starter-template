@@ -3,7 +3,7 @@ import { expect, test } from "@playwright/test";
 test("home shows title and sign-in for anonymous user", async ({ page }) => {
   await page.goto("/");
 
-  await expect(page).toHaveTitle(/Spotfinder/);
+  await expect(page).toHaveTitle(/Starter Template/);
   await expect(page.getByRole("heading", { name: /welcome/i })).toBeVisible();
   await expect(page.getByText(/sign in to access your issues/i)).toBeVisible();
   await expect(page.getByRole("link", { name: /sign in/i })).toBeVisible();

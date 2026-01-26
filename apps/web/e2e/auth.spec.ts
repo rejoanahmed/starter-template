@@ -1,12 +1,18 @@
 import { expect, test } from "@playwright/test";
+import {
+  attachDebugAndThrow,
+  installDebugCapture,
+} from "./utils/debug-capture";
 import { TEST_ORG_ID, TEST_TEAM_ID } from "./utils/seed-org";
+
+const CREATE_TIMEOUT_MS = process.env.CI ? 20_000 : 10_000;
 
 // Runs in "authenticated" project only (playwright.config.ts testMatch).
 
 test("any user can access home page", async ({ page }) => {
   await page.goto("/");
 
-  await expect(page).toHaveTitle(/Spotfinder/);
+  await expect(page).toHaveTitle(/Starter Template/);
 });
 
 test("authenticated user with active org is redirected to org home", async ({
@@ -43,7 +49,8 @@ test("Team Issues page shows New issue and table", async ({ page }) => {
   await expect(page.getByRole("button", { name: /new issue/i })).toBeVisible();
 });
 
-test("can create issue from Team Issues page", async ({ page }) => {
+test("can create issue from Team Issues page", async ({ page }, testInfo) => {
+  const debug = installDebugCapture(page);
   await page.goto(`/org/${TEST_ORG_ID}/team/${TEST_TEAM_ID}/issues`);
 
   await page.getByRole("button", { name: /new issue/i }).click();
@@ -58,13 +65,25 @@ test("can create issue from Team Issues page", async ({ page }) => {
     .getByRole("button", { name: /create issue/i })
     .click();
 
+  const row = page.getByRole("row").filter({ hasText: title });
+  try {
+    await expect(row).toBeVisible({ timeout: CREATE_TIMEOUT_MS });
+  } catch {
+    await attachDebugAndThrow(
+      page,
+      testInfo,
+      debug,
+      title,
+      "Create issue failed: issue did not appear in table."
+    );
+  }
   await expect(
     page.getByRole("dialog").getByRole("heading", { name: /new issue/i })
   ).toBeHidden();
-  await expect(page.getByText(title)).toBeVisible({ timeout: 10000 });
 });
 
-test("can edit issue from Team Issues page", async ({ page }) => {
+test("can edit issue from Team Issues page", async ({ page }, testInfo) => {
+  const debug = installDebugCapture(page);
   await page.goto(`/org/${TEST_ORG_ID}/team/${TEST_TEAM_ID}/issues`);
 
   const title = `E2E edit-me ${Date.now()}`;
@@ -74,8 +93,20 @@ test("can edit issue from Team Issues page", async ({ page }) => {
     .getByRole("dialog")
     .getByRole("button", { name: /create issue/i })
     .click();
-  await expect(page.getByRole("dialog")).toBeHidden({ timeout: 5000 });
-  await expect(page.getByText(title)).toBeVisible({ timeout: 10000 });
+
+  const row = page.getByRole("row").filter({ hasText: title });
+  try {
+    await expect(row).toBeVisible({ timeout: CREATE_TIMEOUT_MS });
+  } catch {
+    await attachDebugAndThrow(
+      page,
+      testInfo,
+      debug,
+      title,
+      "Create (edit test) failed: issue did not appear in table."
+    );
+  }
+  await expect(page.getByRole("dialog")).toBeHidden({ timeout: 3000 });
 
   await page
     .getByRole("row")
@@ -99,7 +130,8 @@ test("can edit issue from Team Issues page", async ({ page }) => {
   await expect(page.getByText(title)).not.toBeVisible();
 });
 
-test("can delete issue from Team Issues page", async ({ page }) => {
+test("can delete issue from Team Issues page", async ({ page }, testInfo) => {
+  const debug = installDebugCapture(page);
   await page.goto(`/org/${TEST_ORG_ID}/team/${TEST_TEAM_ID}/issues`);
 
   const title = `E2E delete-me ${Date.now()}`;
@@ -109,8 +141,20 @@ test("can delete issue from Team Issues page", async ({ page }) => {
     .getByRole("dialog")
     .getByRole("button", { name: /create issue/i })
     .click();
-  await expect(page.getByRole("dialog")).toBeHidden({ timeout: 5000 });
-  await expect(page.getByText(title)).toBeVisible({ timeout: 10000 });
+
+  const row = page.getByRole("row").filter({ hasText: title });
+  try {
+    await expect(row).toBeVisible({ timeout: CREATE_TIMEOUT_MS });
+  } catch {
+    await attachDebugAndThrow(
+      page,
+      testInfo,
+      debug,
+      title,
+      "Create (delete test) failed: issue did not appear in table."
+    );
+  }
+  await expect(page.getByRole("dialog")).toBeHidden({ timeout: 3000 });
 
   await page
     .getByRole("row")

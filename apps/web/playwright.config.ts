@@ -38,5 +38,11 @@ export default defineConfig({
     command: "bun run dev",
     url: "http://localhost:3000",
     reuseExistingServer: !process.env.CI,
+    env: process.env.CI
+      ? {
+          ...process.env,
+          VITE_API_URL: process.env.VITE_API_URL ?? "http://localhost:3001",
+        }
+      : undefined,
   },
 });

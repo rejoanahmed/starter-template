@@ -30,8 +30,8 @@ export type AuthConfig = {
   plugins?: BetterAuthPlugin[];
   db: DB;
   /**
-   * @example spotfinderce.com -> api.spotfinderce.com
-   * pass the value as '.spotfinderce.com'
+   * @example rovierr.com -> api.rovierr.com
+   * pass the value as '.rovierr.com'
    */
   subDomainPrefix?: string;
 };
