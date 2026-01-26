@@ -12,6 +12,7 @@
   },
   "scripts": {
     "dev": "bunx wrangler dev --port 3001 --ip 0.0.0.0",
+    "test": "vitest run",
     "build": "tsdown",
     "deploy": "bunx wrangler deploy --minify",
     "type-check": "tsc -b",
@@ -27,6 +28,7 @@
   "dependencies": {
     "@hono/zod-openapi": "^1.2.0",
     "@hono/zod-validator": "^0.7.6",
+    "@scalar/hono-api-reference": "^0.9.37",
     "@starter/auth": "workspace:*",
     "@starter/db": "workspace:*",
     "better-auth": "^1.4.17",
@@ -39,6 +41,7 @@
   },
   "devDependencies": {
     "tsdown": "^0.20.1",
+    "vitest": "^4.0.18",
     "@cloudflare/workers-types": "^4.20260124.0",
     "@types/node": "^25.0.10",
     "@types/pg": "^8.16.0",

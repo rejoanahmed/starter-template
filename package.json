@@ -19,8 +19,6 @@
     "dev:server": "turbo -F server dev",
     "db:push": "turbo -F @starter/db db:push",
     "db:studio": "turbo -F @starter/db db:studio",
-    "db:generate": "turbo -F @starter/db db:generate",
-    "db:migrate": "turbo -F @starter/db db:migrate",
     "syncpack:check": "syncpack list-mismatches",
     "syncpack:fix": "syncpack fix-mismatches",
     "syncpack:lint": "syncpack lint",

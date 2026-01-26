@@ -10,7 +10,7 @@ export default defineConfig({
   forbidOnly: !!process.env.CI,
   retries: process.env.CI ? 2 : 0,
   workers: process.env.CI ? 1 : undefined,
-  reporter: "html",
+  reporter: [["html"], ["json", { outputFile: "playwright-results.json" }]],
   use: {
     baseURL: "http://localhost:3000",
     trace: "on-first-retry",
@@ -38,5 +38,11 @@ export default defineConfig({
     command: "bun run dev",
     url: "http://localhost:3000",
     reuseExistingServer: !process.env.CI,
+    env: process.env.CI
+      ? {
+          ...process.env,
+          VITE_API_URL: process.env.VITE_API_URL ?? "http://localhost:3001",
+        }
+      : undefined,
   },
 });

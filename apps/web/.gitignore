@@ -18,5 +18,6 @@ todos.json
 
 # Playwright
 /playwright-report
+/playwright-results.json
 /test-results
 /e2e/.auth

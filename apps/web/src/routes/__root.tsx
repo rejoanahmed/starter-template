@@ -36,26 +36,25 @@ export const Route = createRootRouteWithContext<{
         content: "width=device-width, initial-scale=1",
       },
       {
-        title: "Spotfinder - Find Your Perfect Space",
+        title: "Starter Template",
       },
       {
         name: "description",
         content:
-          "Discover unique hourly rental spaces for any occasion. Party rooms, studios, and more at affordable rates.",
+          "Bun monorepo starter with TanStack Router, Hono API, and Better Auth.",
       },
       {
         name: "keywords",
-        content:
-          "hourly rental, party room, event space, short-term rental, venue booking, meeting room",
+        content: "monorepo, bun, tanstack, hono, better auth, starter template",
       },
       {
         property: "og:title",
-        content: "Spotfinder - Find Your Perfect Space",
+        content: "Starter Template",
       },
       {
         property: "og:description",
         content:
-          "Discover unique hourly rental spaces for any occasion. Party rooms, studios, and more at affordable rates.",
+          "Bun monorepo starter with TanStack Router, Hono API, and Better Auth.",
       },
       {
         property: "og:type",
@@ -71,12 +70,12 @@ export const Route = createRootRouteWithContext<{
       },
       {
         name: "twitter:title",
-        content: "Spotfinder - Find Your Perfect Space",
+        content: "Starter Template",
       },
       {
         name: "twitter:description",
         content:
-          "Discover unique hourly rental spaces for any occasion. Party rooms, studios, and more at affordable rates.",
+          "Bun monorepo starter with TanStack Router, Hono API, and Better Auth.",
       },
     ],
     links: [
@@ -135,7 +134,7 @@ function RootDocument({ children }: { children: React.ReactNode }) {
             }}
             plugins={[
               {
-                name: "Spotfinder",
+                name: "Starter Template",
                 render: <TanStackRouterDevtoolsPanel />,
               },
             ]}
