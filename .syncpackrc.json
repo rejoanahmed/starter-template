@@ -29,7 +29,16 @@
       "packages": ["**"],
       "dependencies": ["**"],
       "isIgnored": true,
-      "ignoredDependencies": ["react", "react-dom", "@types/react"]
+      "ignoredDependencies": [
+        "react",
+        "react-dom",
+        "@types/react",
+        "expo",
+        "expo-*",
+        "react-native",
+        "react-native-*",
+        "@react-navigation/*"
+      ]
     }
   ]
 }

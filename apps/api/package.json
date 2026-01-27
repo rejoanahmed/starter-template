@@ -34,7 +34,7 @@
     "better-auth": "^1.4.17",
     "dotenv": "^17.2.3",
     "drizzle-zod": "^0.8.3",
-    "hono": "^4.11.5",
+    "hono": "^4.11.6",
     "nanoid": "^5.1.6",
     "stripe": "^20.2.0",
     "zod": "^4.3.6"
@@ -42,7 +42,7 @@
   "devDependencies": {
     "tsdown": "^0.20.1",
     "vitest": "^4.0.18",
-    "@cloudflare/workers-types": "^4.20260124.0",
+    "@cloudflare/workers-types": "^4.20260127.0",
     "@types/node": "^25.0.10",
     "@types/pg": "^8.16.0",
     "drizzle-kit": "^0.31.8",
