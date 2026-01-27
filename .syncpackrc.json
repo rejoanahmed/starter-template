@@ -15,9 +15,21 @@
   ],
   "versionGroups": [
     {
+      "label": "Pin React to 19.1.0 for Expo compatibility",
+      "dependencies": ["react", "react-dom"],
+      "pinVersion": "19.1.0"
+    },
+    {
+      "label": "Pin @types/react to 19.1.x for Expo compatibility",
+      "dependencies": ["@types/react"],
+      "pinVersion": "~19.1.10"
+    },
+    {
       "label": "Use the highest version found for each package",
       "packages": ["**"],
-      "dependencies": ["**"]
+      "dependencies": ["**"],
+      "isIgnored": true,
+      "ignoredDependencies": ["react", "react-dom", "@types/react"]
     }
   ]
 }
