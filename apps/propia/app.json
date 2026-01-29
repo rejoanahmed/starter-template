@@ -1,0 +1,53 @@
+{
+  "expo": {
+    "newArchEnabled": true,
+    "name": "Propia",
+    "slug": "propia",
+    "version": "1.0.0",
+    "runtimeVersion": "1.0.0",
+    "scheme": "propia",
+    "platforms": ["ios", "android"],
+    "experiments": {
+      "tsconfigPaths": true,
+      "typedRoutes": true
+    },
+    "plugins": [
+      "expo-router",
+      "expo-font",
+      "expo-asset",
+      "@react-native-community/datetimepicker"
+    ],
+    "orientation": "portrait",
+    "icon": "./src/assets/icon.png",
+    "userInterfaceStyle": "light",
+    "splash": {
+      "image": "./src/assets/splash.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#ffffff"
+    },
+    "assetBundlePatterns": ["**/*"],
+    "ios": {
+      "supportsTablet": true
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./src/assets/adaptive-icon.png",
+        "backgroundColor": "#ffffff"
+      },
+      "softwareKeyboardLayoutMode": "pan",
+      "predictiveBackGestureEnabled": false
+    },
+    "extra": {
+      "router": {
+        "origin": false
+      },
+      "eas": {
+        "projectId": "da376216-d29c-49c4-9d4e-b3f75f036b55"
+      }
+    },
+    "owner": "rexcode",
+    "updates": {
+      "url": "https://u.expo.dev/da376216-d29c-49c4-9d4e-b3f75f036b55"
+    }
+  }
+}

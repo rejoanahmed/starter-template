@@ -1,9 +1,9 @@
 {
-  "name": "feedy",
+  "name": "propia",
   "main": "expo-router/entry",
   "version": "1.0.0",
   "scripts": {
-    "dev-dis": "expo start",
+    "dev": "expo start",
     "android": "expo start --android",
     "ios": "expo start --ios",
     "web": "expo start --web",
@@ -51,6 +51,7 @@
     "react-native-chart-kit": "^6.12.0",
     "react-native-css-interop": "^0.2.1",
     "react-native-gesture-handler": "~2.28.0",
+    "react-native-maps": "1.20.1",
     "react-native-modal": "^14.0.0-rc.1",
     "react-native-modal-datetime-picker": "^18.0.0",
     "react-native-reanimated": "~4.1.1",

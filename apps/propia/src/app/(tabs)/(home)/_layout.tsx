@@ -1,0 +1,33 @@
+// app/(tabs)/(home)/_layout.tsx
+
+import HomeTabs from "@propia/components/HomeTabs";
+import SearchBar from "@propia/components/SearchBar";
+import { Stack } from "expo-router";
+import { createContext, useRef } from "react";
+import { Animated, View } from "react-native";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
+
+// Create a context to share the scrollY value
+export const ScrollContext = createContext<Animated.Value>(
+  new Animated.Value(0)
+);
+
+export default function HomeLayout() {
+  const insets = useSafeAreaInsets();
+  const scrollY = useRef(new Animated.Value(0)).current;
+
+  return (
+    <ScrollContext.Provider value={scrollY}>
+      <View
+        className="flex-1 bg-light-primary dark:bg-dark-primary"
+        style={{ paddingTop: insets.top }}
+      >
+        <SearchBar />
+        <HomeTabs scrollY={scrollY} />
+        <View className="flex-1">
+          <Stack screenOptions={{ headerShown: false, animation: "none" }} />
+        </View>
+      </View>
+    </ScrollContext.Provider>
+  );
+}
