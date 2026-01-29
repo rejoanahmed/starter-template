@@ -22,7 +22,7 @@
     "syncpack:check": "syncpack list-mismatches",
     "syncpack:fix": "syncpack fix-mismatches",
     "syncpack:lint": "syncpack lint",
-    "update:all": "for file in package.json apps/*/package.json packages/*/package.json; do [ -f \"$file\" ] && bunx npm-check-updates -u --packageFile \"$file\" --reject 'react,react-dom,@types/react,expo,expo-*,react-native,react-native-*,@react-navigation/*' || true; done && bun install && (cd apps/native && echo 'y' | bunx expo install --fix || true) && bun install && bun run syncpack:fix",
+    "update:all": "for file in package.json apps/*/package.json packages/*/package.json; do [ -f \"$file\" ] && bunx npm-check-updates -u --packageFile \"$file\" --reject 'react,react-dom,@types/react,expo,expo-*,react-native,react-native-*,@react-navigation/*' || true; done && bun install && (cd apps/feedy && echo 'y' | bunx expo install --fix || true) && bun install && bun run syncpack:fix",
     "cl-install": "find . -name 'node_modules' -type d -prune -exec rm -rf {} + && find . -name 'bun.lock' -type f -delete && bun install",
     "prepare": "husky",
     "auth:generate-schema": "bunx @better-auth/cli generate --config packages/auth/src/index.ts --output packages/db/src/schema/auth.ts -y"
