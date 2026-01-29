@@ -48,7 +48,9 @@ export const SmallProgressBarCard = ({
 
   const animateProgress = useCallback(() => {
     // Reset all animations
-    animatedValues.forEach((anim) => anim.setValue(0));
+    for (const anim of animatedValues) {
+      anim.setValue(0);
+    }
 
     // Animate bars with staggered timing
     const animations = animatedValues.map((anim, index) =>

@@ -37,6 +37,7 @@ export default function PostScreen() {
           rightComponents={[
             <HeaderIcon
               icon="Ellipsis"
+              key="ellipsis"
               onPress={() => userActionsSheetRef.current?.show()}
             />,
           ]}

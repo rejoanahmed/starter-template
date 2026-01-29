@@ -17,7 +17,7 @@ import { Button } from "./Button";
 import Favorite from "./Favorite";
 import ThemedText from "./ThemedText";
 
-const { width: windowWidth } = Dimensions.get("window");
+const { width: _ } = Dimensions.get("window");
 type CardProps = {
   title: string;
   description?: string;

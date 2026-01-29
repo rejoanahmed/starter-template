@@ -1,6 +1,6 @@
 import { useIsFocused } from "@react-navigation/native";
 import type React from "react";
-import { memo, useEffect, useRef, useState } from "react";
+import { memo, useCallback, useEffect, useRef, useState } from "react";
 import {
   Animated,
   Dimensions,
@@ -44,6 +44,7 @@ const propsAreEqual = (
   nextProps: AnimatedViewProps
 ) => {
   // Always re-render when in development mode to support hot reloading
+  // biome-ignore lint/correctness/noUndeclaredVariables: provided by expo
   if (__DEV__) {
     return false;
   }
@@ -97,40 +98,10 @@ function AnimatedViewComponent({
   // Important: initial state is false if triggerOnVisible is true, otherwise we animate immediately
   const [isVisible, setIsVisible] = useState(false);
   const { height: windowHeight } = Dimensions.get("window");
-  const measureInterval = useRef<NodeJS.Timeout | null>(null);
+  const measureInterval = useRef<ReturnType<typeof setInterval> | null>(null);
   const isFirstRender = useRef(true);
-
-  // Initialize with visibility detection - but delayed to ensure proper measurement
-  useEffect(() => {
-    if (!triggerOnVisible) {
-      // If not using visibility detection, just set to visible
-      setIsVisible(true);
-      return;
-    }
-
-    // Important: For first render, ensure layout is complete before measuring
-    // and we're actually checking visibility correctly
-    if (isFirstRender.current) {
-      isFirstRender.current = false;
-
-      // Wait for interactions to complete (navigation, etc)
-      InteractionManager.runAfterInteractions(() => {
-        // Slight delay to ensure component is fully mounted and measurable
-        setTimeout(() => {
-          checkVisibility();
-        }, 0);
-      });
-    }
-
-    return () => {
-      if (measureInterval.current) {
-        clearInterval(measureInterval.current);
-      }
-    };
-  }, [triggerOnVisible, checkVisibility]);
-
   // Function to check visibility by measuring the component
-  const checkVisibility = () => {
+  const checkVisibility = useCallback(() => {
     if (!viewRef.current || hasAnimatedOnce.current) return;
 
     // Clear any existing interval
@@ -170,7 +141,36 @@ function AnimatedViewComponent({
         }
       });
     }, 0);
-  };
+  }, [windowHeight, visibilityThreshold]);
+
+  // Initialize with visibility detection - but delayed to ensure proper measurement
+  useEffect(() => {
+    if (!triggerOnVisible) {
+      // If not using visibility detection, just set to visible
+      setIsVisible(true);
+      return;
+    }
+
+    // Important: For first render, ensure layout is complete before measuring
+    // and we're actually checking visibility correctly
+    if (isFirstRender.current) {
+      isFirstRender.current = false;
+
+      // Wait for interactions to complete (navigation, etc)
+      InteractionManager.runAfterInteractions(() => {
+        // Slight delay to ensure component is fully mounted and measurable
+        setTimeout(() => {
+          checkVisibility();
+        }, 0);
+      });
+    }
+
+    return () => {
+      if (measureInterval.current) {
+        clearInterval(measureInterval.current);
+      }
+    };
+  }, [triggerOnVisible, checkVisibility]);
 
   // Handle layout to initialize position tracking
   const handleLayout = (_e: LayoutChangeEvent) => {
@@ -227,7 +227,7 @@ function AnimatedViewComponent({
     easing,
   ]);
 
-  const getAnimationStyle = (): any => {
+  const getAnimationStyle = () => {
     const baseStyle: ViewStyle = {};
 
     switch (animation) {

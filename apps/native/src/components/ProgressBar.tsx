@@ -14,7 +14,7 @@ type ProgressBarProps = {
   delay?: number;
 };
 
-const { height: screenHeight } = Dimensions.get("window");
+const { height: _ } = Dimensions.get("window");
 
 const ProgressBar: React.FC<ProgressBarProps> = ({
   percentage,

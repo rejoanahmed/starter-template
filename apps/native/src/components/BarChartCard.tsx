@@ -42,7 +42,9 @@ const BarChartCard: React.FC<BarChartCardProps> = ({
 
   const startAnimation = useCallback(() => {
     // Reset all bars
-    animatedValues.forEach((anim) => anim.setValue(0));
+    for (const anim of animatedValues) {
+      anim.setValue(0);
+    }
 
     // Animate bars with staggered timing
     const animations = animatedValues.map((anim, index) =>

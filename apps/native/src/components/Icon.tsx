@@ -85,6 +85,7 @@ const Icon: React.FC<IconProps> = ({
     .join(" ")
     .trim();
 
+  // biome-ignore lint/performance/noDynamicNamespaceImportAccess: TODO change it to nativewind icon component
   const IconComponent = LucideIcons[name] as React.ComponentType<LucideProps>;
 
   const content = (

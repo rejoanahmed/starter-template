@@ -20,9 +20,10 @@ export default function UserProfileScreen() {
     <>
       <Header
         rightComponents={[
-          <HeaderIcon icon="Instagram" onPress={() => {}} />,
+          <HeaderIcon icon="Instagram" key="instagram" onPress={() => {}} />,
           <HeaderIcon
             icon="MoreHorizontal"
+            key="more-horizontal"
             onPress={() => userActionsSheetRef.current?.show()}
           />,
         ]}

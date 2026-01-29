@@ -77,9 +77,7 @@ const Selectable: React.FC<SelectableProps> = ({
             <AnimatedView animation="bounceIn" className="ml-3" duration={500}>
               <Icon color={colors.highlight} name="CheckCircle2" size={24} />
             </AnimatedView>
-          ) : (
-            <></>
-          )}
+          ) : null}
         </View>
       </Pressable>
 

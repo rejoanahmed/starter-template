@@ -88,10 +88,10 @@ export const Button: React.FC<ButtonProps> = ({
         return 18;
     }
   };
+  const colors = useThemeColors();
 
   // Default icon color based on variant
   const getIconColor = () => {
-    const colors = useThemeColors();
     if (iconColor) return iconColor;
 
     return variant === "outline" ||

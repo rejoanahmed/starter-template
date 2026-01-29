@@ -132,8 +132,8 @@ export default function MultiStep({
     });
   }, [
     currentStepIndex,
+    progressAnims,
     fadeAnim,
-    progressAnims[index],
     slideAnim, // Animate progress indicators
     steps.forEach,
   ]);
