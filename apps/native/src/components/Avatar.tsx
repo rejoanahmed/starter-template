@@ -1,4 +1,4 @@
-import { router } from "expo-router";
+import { type Href, router } from "expo-router";
 import type React from "react";
 import {
   Image,
@@ -16,7 +16,7 @@ type AvatarProps = {
   border?: boolean;
   bgColor?: string; // Optional background color
   onPress?: () => void; // Optional onPress for Pressable or Link
-  link?: string; // Optional URL for Link
+  link?: Href; // Optional URL for Link
   className?: string;
   style?: ViewStyle;
 };

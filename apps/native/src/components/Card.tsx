@@ -2,7 +2,7 @@ import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import useThemeColors from "@native/app/contexts/ThemeColors";
 import { shadowPresets } from "@native/utils/useShadow";
 import { LinearGradient } from "expo-linear-gradient";
-import { router } from "expo-router";
+import { type Href, router } from "expo-router";
 import {
   Dimensions,
   Image,
@@ -23,7 +23,7 @@ type CardProps = {
   description?: string;
   hasShadow?: boolean;
   image: string | ImageSourcePropType;
-  href?: string;
+  href?: Href;
   onPress?: () => void;
   variant?: "classic" | "overlay" | "compact" | "minimal";
   className?: string;

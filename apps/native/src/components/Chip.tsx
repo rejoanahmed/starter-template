@@ -1,5 +1,5 @@
 import useThemeColors from "@native/app/contexts/ThemeColors";
-import { Link } from "expo-router";
+import { type Href, Link } from "expo-router";
 import React, { type ReactNode } from "react";
 import {
   Image,
@@ -19,7 +19,7 @@ type ChipProps = {
   className?: string;
   style?: ViewStyle;
   size?: ChipSize;
-  href?: string;
+  href?: Href;
   onPress?: () => void;
   icon?: IconName; // Correct icon type
   iconSize?: number;

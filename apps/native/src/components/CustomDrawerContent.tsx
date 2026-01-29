@@ -1,4 +1,4 @@
-import { router } from "expo-router";
+import { type Href, router } from "expo-router";
 import React, { useRef } from "react";
 import { Pressable, TouchableOpacity, View } from "react-native";
 import type { ActionSheetRef } from "react-native-actions-sheet";
@@ -88,7 +88,7 @@ export default function CustomDrawerContent() {
 }
 
 type NavItemProps = {
-  href: string;
+  href: Href;
   icon: IconName;
   label: string;
   className?: string;

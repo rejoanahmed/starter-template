@@ -1,7 +1,7 @@
 // components/Button.tsx
 
 import useThemeColors from "@native/app/contexts/ThemeColors";
-import { router } from "expo-router";
+import { type Href, router } from "expo-router";
 import type React from "react";
 import { ActivityIndicator, Text, TouchableOpacity, View } from "react-native";
 import Icon, { type IconName } from "./Icon";
@@ -15,7 +15,7 @@ type ButtonProps = {
   variant?: "primary" | "secondary" | "outline" | "ghost";
   size?: "small" | "medium" | "large";
   rounded?: RoundedOption;
-  href?: string;
+  href?: Href;
   className?: string;
   textClassName?: string;
   disabled?: boolean;

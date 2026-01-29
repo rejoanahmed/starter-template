@@ -1,5 +1,5 @@
 import useThemeColors from "@native/app/contexts/ThemeColors";
-import { Link } from "expo-router";
+import { type Href, Link } from "expo-router";
 import type React from "react";
 import { useEffect, useRef } from "react";
 import {
@@ -15,7 +15,7 @@ type FloatingButtonProps = {
   icon: IconName;
   label?: string;
   onPress?: () => void;
-  href?: string;
+  href?: Href;
   className?: string;
   bottom?: number;
   right?: number;

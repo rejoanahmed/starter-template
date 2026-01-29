@@ -1,5 +1,5 @@
 import { useThemeColors } from "@native/app/contexts/ThemeColors";
-import { Link } from "expo-router";
+import { type Href, Link } from "expo-router";
 import type { LucideProps } from "lucide-react-native";
 import * as LucideIcons from "lucide-react-native";
 import type React from "react";
@@ -18,7 +18,7 @@ type IconProps = {
   color?: string;
   variant?: IconVariant;
   iconSize?: IconSize;
-  href?: string;
+  href?: Href;
   onPress?: () => void;
   disabled?: boolean;
   className?: string;

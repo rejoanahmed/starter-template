@@ -1,6 +1,6 @@
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import useThemeColors from "@native/app/contexts/ThemeColors";
-import { Link } from "expo-router";
+import { type Href, Link } from "expo-router";
 import { Dimensions, Text, TouchableOpacity, View } from "react-native";
 import ImageCarousel from "./ImageCarousel";
 import ThemedText from "./ThemedText";
@@ -11,11 +11,11 @@ type SliderCardProps = {
   title: string;
   description?: string;
   image: string | string[];
-  href: string;
+  href: Href;
   className?: string;
   button?: string;
   rating?: string;
-  distance?: any;
+  distance?: number;
   price?: string;
 };
 

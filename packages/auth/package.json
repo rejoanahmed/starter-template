@@ -27,6 +27,6 @@
   },
   "dependencies": {
     "@starter/db": "workspace:*",
-    "better-auth": "1.4.17"
+    "better-auth": "1.4.18"
   }
 }

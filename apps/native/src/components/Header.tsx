@@ -1,7 +1,7 @@
 import { useThemeColors } from "@native/app/contexts/ThemeColors";
 import { BlurView } from "expo-blur";
 import { LinearGradient } from "expo-linear-gradient";
-import { Link, router } from "expo-router";
+import { type Href, Link, router } from "expo-router";
 import type React from "react";
 import { useEffect, useRef } from "react";
 import {
@@ -39,8 +39,6 @@ const Header: React.FC<HeaderProps> = ({
   showBackButton = false,
   onBackPress,
   rightComponents = [],
-  backgroundColor,
-  textColor,
   leftComponent,
   middleComponent,
   className,
@@ -264,11 +262,11 @@ const Header: React.FC<HeaderProps> = ({
 export default Header;
 
 type HeaderItemProps = {
-  href?: string;
+  href?: Href;
   icon: IconName;
   className?: string;
   hasBadge?: boolean;
-  onPress?: any;
+  onPress?: () => void;
   isWhite?: boolean;
 };
 
@@ -297,22 +295,24 @@ export const HeaderIcon = ({
         </View>
       </TouchableOpacity>
     ) : (
-      <Link asChild href={href || ""}>
-        <TouchableOpacity className="overflow-visible">
-          <View
-            className={`flex-row items-center justify-center relative overflow-visible h-7 w-7 ${className}`}
-          >
-            {hasBadge && (
-              <View className="w-4 h-4 border-2 border-background z-30 absolute -top-0 -right-[3px] bg-red-500 rounded-full" />
-            )}
-            {isWhite ? (
-              <Icon color="white" name={icon} size={25} />
-            ) : (
-              <Icon name={icon} size={25} />
-            )}
-          </View>
-        </TouchableOpacity>
-      </Link>
+      href && (
+        <Link asChild href={href}>
+          <TouchableOpacity className="overflow-visible">
+            <View
+              className={`flex-row items-center justify-center relative overflow-visible h-7 w-7 ${className}`}
+            >
+              {hasBadge && (
+                <View className="w-4 h-4 border-2 border-background z-30 absolute -top-0 -right-[3px] bg-red-500 rounded-full" />
+              )}
+              {isWhite ? (
+                <Icon color="white" name={icon} size={25} />
+              ) : (
+                <Icon name={icon} size={25} />
+              )}
+            </View>
+          </TouchableOpacity>
+        </Link>
+      )
     )}
   </>
 );

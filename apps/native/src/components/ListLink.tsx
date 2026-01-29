@@ -1,4 +1,4 @@
-import { Link } from "expo-router";
+import { type Href, Link } from "expo-router";
 import type React from "react";
 import { Pressable, View, type ViewStyle } from "react-native";
 import Icon, { type IconName } from "./Icon";
@@ -8,7 +8,7 @@ type ListLinkProps = {
   icon?: IconName;
   title: string;
   description?: string;
-  href?: string;
+  href?: Href;
   onPress?: () => void;
   showChevron?: boolean;
   className?: string;

@@ -1,13 +1,14 @@
 import { Button } from "@native/components/Button";
 import Icon, { type IconName } from "@native/components/Icon";
 import ThemedText from "@native/components/ThemedText";
+import type { Href } from "expo-router";
 import { type StyleProp, View, type ViewStyle } from "react-native";
 
 type PlaceholderProps = {
   title: string;
   subtitle?: string;
   button?: string;
-  href?: string;
+  href?: Href;
   icon?: IconName;
   className?: string;
   style?: StyleProp<ViewStyle>;

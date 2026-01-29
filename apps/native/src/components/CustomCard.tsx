@@ -1,4 +1,4 @@
-import { Link } from "expo-router";
+import { type Href, Link } from "expo-router";
 import type React from "react";
 import type { ReactNode } from "react";
 import {
@@ -27,7 +27,7 @@ type CustomCardProps = {
   overlayOpacity?: number;
   horizontal?: boolean;
   onPress?: () => void;
-  href?: string;
+  href?: Href;
 };
 
 const CustomCard: React.FC<CustomCardProps> = ({

@@ -28,26 +28,26 @@
   "dependencies": {
     "@hono/zod-openapi": "^1.2.0",
     "@hono/zod-validator": "^0.7.6",
-    "@scalar/hono-api-reference": "^0.9.37",
+    "@scalar/hono-api-reference": "^0.9.38",
     "@starter/auth": "workspace:*",
     "@starter/db": "workspace:*",
-    "better-auth": "^1.4.17",
+    "better-auth": "^1.4.18",
     "dotenv": "^17.2.3",
     "drizzle-zod": "^0.8.3",
-    "hono": "^4.11.6",
+    "hono": "^4.11.7",
     "nanoid": "^5.1.6",
-    "stripe": "^20.2.0",
+    "stripe": "^20.3.0",
     "zod": "^4.3.6"
   },
   "devDependencies": {
     "tsdown": "^0.20.1",
     "vitest": "^4.0.18",
-    "@cloudflare/workers-types": "^4.20260127.0",
-    "@types/node": "^25.0.10",
+    "@cloudflare/workers-types": "^4.20260129.0",
+    "@types/node": "^25.1.0",
     "@types/pg": "^8.16.0",
     "drizzle-kit": "^0.31.8",
     "tsx": "^4.21.0",
     "typescript": "^5.9.3",
-    "wrangler": "^4.60.0"
+    "wrangler": "^4.61.0"
   }
 }

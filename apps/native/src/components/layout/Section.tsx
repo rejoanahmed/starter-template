@@ -1,4 +1,4 @@
-import { Link } from "expo-router";
+import { type Href, Link } from "expo-router";
 import type React from "react";
 import { View, type ViewStyle } from "react-native";
 import Icon, { type IconName } from "../Icon";
@@ -17,7 +17,7 @@ type SectionProps = {
   icon?: IconName;
   titleSize?: TitleSize;
   style?: ViewStyle;
-  link?: string;
+  link?: Href;
   linkText?: string;
   linkClassName?: string;
 };

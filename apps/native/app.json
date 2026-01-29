@@ -8,7 +8,8 @@
     "scheme": "feedy",
     "platforms": ["ios", "android"],
     "experiments": {
-      "tsconfigPaths": true
+      "tsconfigPaths": true,
+      "typedRoutes": true
     },
     "plugins": [
       "expo-router",

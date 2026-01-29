@@ -1,4 +1,4 @@
-import { Link } from "expo-router";
+import { type Href, Link } from "expo-router";
 import type React from "react";
 import { forwardRef } from "react";
 import {
@@ -34,7 +34,7 @@ interface ListItemProps extends PressableProps {
   disabled?: boolean;
   className?: string;
   style?: ViewStyle;
-  href?: string;
+  href?: Href;
 }
 
 const ListItem = forwardRef<View, ListItemProps>((props, ref) => {

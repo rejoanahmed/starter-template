@@ -1,4 +1,4 @@
-import { Link } from "expo-router";
+import { type Href, Link } from "expo-router";
 import { ScrollView, View, type ViewStyle } from "react-native";
 import ThemedText from "./ThemedText";
 
@@ -6,7 +6,7 @@ import ThemedText from "./ThemedText";
 type CardScrollerProps = {
   title?: string;
   img?: string;
-  allUrl?: string;
+  allUrl?: Href;
   children: React.ReactNode;
   enableSnapping?: boolean;
   snapInterval?: number;

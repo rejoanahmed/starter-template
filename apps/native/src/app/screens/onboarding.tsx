@@ -18,7 +18,7 @@ export default function OnboardingStart() {
         onClose={() => router.push("/(drawer)/(tabs)/")}
         onComplete={() => {
           router.push({
-            pathname: "/(drawer)/(tabs)/",
+            pathname: "/(drawer)/(tabs)",
             params: {},
           });
         }}
