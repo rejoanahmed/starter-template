@@ -111,7 +111,7 @@ class BackHandlerManager {
   // The main handler function that gets attached to the back button
   private readonly mainHandler = (): boolean => {
     if (this.activeHandlerId && this.handlers.has(this.activeHandlerId)) {
-      return this.handlers.get(this.activeHandlerId)?.();
+      return this.handlers.get(this.activeHandlerId)?.() ?? false;
     }
     return false; // Let the default behavior happen
   };

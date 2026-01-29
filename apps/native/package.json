@@ -7,7 +7,8 @@
     "android": "expo start --android",
     "ios": "expo start --ios",
     "web": "expo start --web",
-    "lint": "expo lint"
+    "lint": "expo lint",
+    "type-check": "tsc -b"
   },
   "dependencies": {
     "@babel/plugin-transform-react-jsx": "^7.28.6",
@@ -46,6 +47,7 @@
     "react-dom": "19.1.0",
     "react-native": "0.81.5",
     "react-native-actions-sheet": "^10.1.2",
+    "react-native-calendars": "^1.1313.0",
     "react-native-chart-kit": "^6.12.0",
     "react-native-css-interop": "^0.2.1",
     "react-native-gesture-handler": "~2.28.0",

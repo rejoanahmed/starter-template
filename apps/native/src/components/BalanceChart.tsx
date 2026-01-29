@@ -11,10 +11,6 @@ export const BalanceChart = () => {
     5.7, 6.1, 6.8, 7.3, 7.9,
   ];
 
-  const currentFollowers = followersData.at(-1);
-  const startingFollowers = followersData[0];
-  const _followersGained = currentFollowers - startingFollowers;
-
   const chartData = {
     labels: [
       "1",
