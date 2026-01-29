@@ -1,48 +1,52 @@
 {
   "expo": {
-    "name": "native",
-    "slug": "native",
-    "version": "1.0.0",
-    "orientation": "portrait",
-    "icon": ".src/assets/images/icon.png",
-    "scheme": "native",
-    "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
+    "name": "Feedy",
+    "slug": "feedy",
+    "version": "1.0.0",
+    "runtimeVersion": "1.0.0",
+    "scheme": "feedy",
+    "platforms": ["ios", "android"],
+    "experiments": {
+      "tsconfigPaths": true
+    },
+    "plugins": [
+      "expo-router",
+      "expo-font",
+      "expo-asset",
+      "@react-native-community/datetimepicker"
+    ],
+    "orientation": "portrait",
+    "icon": "./src/assets/icon.png",
+    "userInterfaceStyle": "light",
+    "splash": {
+      "image": "./src/assets/splash.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#ffffff"
+    },
+    "assetBundlePatterns": ["**/*"],
     "ios": {
       "supportsTablet": true
     },
     "android": {
       "adaptiveIcon": {
-        "backgroundColor": "#E6F4FE",
-        "foregroundImage": ".src/assets/images/android-icon-foreground.png",
-        "backgroundImage": ".src/assets/images/android-icon-background.png",
-        "monochromeImage": ".src/assets/images/android-icon-monochrome.png"
+        "foregroundImage": "./src/assets/adaptive-icon.png",
+        "backgroundColor": "#ffffff"
       },
-      "edgeToEdgeEnabled": true,
+      "softwareKeyboardLayoutMode": "pan",
       "predictiveBackGestureEnabled": false
     },
-    "web": {
-      "output": "static",
-      "favicon": ".src/assets/images/favicon.png"
+    "extra": {
+      "router": {
+        "origin": false
+      },
+      "eas": {
+        "projectId": "da376216-d29c-49c4-9d4e-b3f75f036b55"
+      }
     },
-    "plugins": [
-      "expo-router",
-      [
-        "expo-splash-screen",
-        {
-          "image": ".src/assets/images/splash-icon.png",
-          "imageWidth": 200,
-          "resizeMode": "contain",
-          "backgroundColor": "#ffffff",
-          "dark": {
-            "backgroundColor": "#000000"
-          }
-        }
-      ]
-    ],
-    "experiments": {
-      "typedRoutes": true,
-      "reactCompiler": true
+    "owner": "thomino",
+    "updates": {
+      "url": "https://u.expo.dev/da376216-d29c-49c4-9d4e-b3f75f036b55"
     }
   }
 }

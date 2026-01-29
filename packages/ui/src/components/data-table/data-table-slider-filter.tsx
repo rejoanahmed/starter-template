@@ -16,10 +16,10 @@ import { cn } from "@starter/ui/lib/utils";
 import type { Column } from "@tanstack/react-table";
 import * as React from "react";
 
-interface Range {
+type Range = {
   min: number;
   max: number;
-}
+};
 
 type RangeValue = [number, number];
 
@@ -47,10 +47,10 @@ function parseValuesAsNumbers(value: unknown): RangeValue | undefined {
   return undefined;
 }
 
-interface DataTableSliderFilterProps<TData> {
+type DataTableSliderFilterProps<TData> = {
   column: Column<TData, unknown>;
   title?: string;
-}
+};
 
 export function DataTableSliderFilter<TData>({
   column,

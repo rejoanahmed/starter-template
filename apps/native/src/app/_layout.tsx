@@ -1,30 +1,30 @@
-import {
-  DarkTheme,
-  DefaultTheme,
-  ThemeProvider,
-} from "@react-navigation/native";
+import "../global.css";
+import { Sheets } from "@native/components/Sheets";
 import { Stack } from "expo-router";
-import { StatusBar } from "expo-status-bar";
-import "react-native-reanimated";
-import { useColorScheme } from "@native/hooks/use-color-scheme";
-
-export const unstable_settings = {
-  anchor: "(tabs)",
-};
+import { Platform } from "react-native";
+import { SheetProvider } from "react-native-actions-sheet";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
+import useThemeColors from "./contexts/ThemeColors";
+import { ThemeProvider } from "./contexts/ThemeContext";
 
 export default function RootLayout() {
-  const colorScheme = useColorScheme();
-
+  const colors = useThemeColors();
   return (
-    <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
-      <Stack>
-        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-        <Stack.Screen
-          name="modal"
-          options={{ presentation: "modal", title: "Modal" }}
-        />
-      </Stack>
-      <StatusBar style="auto" />
-    </ThemeProvider>
+    <GestureHandlerRootView
+      className={`bg-background  ${Platform.OS === "ios" ? "pb-0 " : ""}`}
+      style={{ flex: 1 }}
+    >
+      <ThemeProvider>
+        <SheetProvider>
+          <Sheets />
+          <Stack
+            screenOptions={{
+              headerShown: false,
+              contentStyle: { backgroundColor: colors.bg },
+            }}
+          />
+        </SheetProvider>
+      </ThemeProvider>
+    </GestureHandlerRootView>
   );
 }

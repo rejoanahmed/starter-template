@@ -24,12 +24,12 @@ import type { Option } from "@starter/ui/types/data-table";
 import type { Column } from "@tanstack/react-table";
 import * as React from "react";
 
-interface DataTableFacetedFilterProps<TData, TValue> {
+type DataTableFacetedFilterProps<TData, TValue> = {
   column?: Column<TData, TValue>;
   title?: string;
   options: Option[];
   multiple?: boolean;
-}
+};
 
 export function DataTableFacetedFilter<TData, TValue>({
   column,
