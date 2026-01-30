@@ -1,0 +1,9 @@
+# Wrangler dev bindings. Copy to .dev.vars; setup script fills where possible.
+
+NODE_ENV=development
+DATABASE_URL=xxxxx
+BETTER_AUTH_SECRET=xxxxx
+BETTER_AUTH_URL=http://localhost:3001
+GOOGLE_CLIENT_ID=xxxxx
+GOOGLE_CLIENT_SECRET=xxxxx
+CORS_ORIGINS=http://localhost:3000

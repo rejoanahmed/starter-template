@@ -2,9 +2,10 @@
 .env
 .env.production
 .env.production.local
-# .dev.vars is auto-generated from .env (do not edit manually)
+# .dev.vars is created from .dev-vars.example by setup script
 .dev.vars
 .dev.vars.production
+!.dev-vars.example
 
 # Wrangler
 .wrangler/

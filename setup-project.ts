@@ -11,6 +11,7 @@
  * - Sets bundle id / package from domain (e.g. com.example.app)
  */
 
+import { execSync } from "node:child_process";
 import { promises as fs } from "node:fs";
 import path from "node:path";
 import { createInterface } from "node:readline";
@@ -313,7 +314,57 @@ async function main() {
     console.log("  Updated .syncpackrc.json");
   }
 
-  console.log("\nDone. Next: bun install (if you changed package names).\n");
+  // --- Env files: copy examples to .env / .dev-vars and set defaults
+  const apiDevVarsExample = path.join(ROOT, "apps", "api", ".dev-vars.example");
+  const apiDevVars = path.join(ROOT, "apps", "api", ".dev-vars");
+  const webEnvExample = path.join(ROOT, "apps", "web", ".env.example");
+  const webEnv = path.join(ROOT, "apps", "web", ".env");
+
+  const defaultOrigin = "http://localhost:3000";
+  const defaultApiUrl = "http://localhost:3001";
+  const betterAuthSecret = execSync("openssl rand -base64 32", {
+    encoding: "utf-8",
+  }).trim();
+
+  if (await exists(apiDevVarsExample)) {
+    let devVarsContent = await fs.readFile(apiDevVarsExample, "utf-8");
+    devVarsContent = devVarsContent
+      .replace(
+        /BETTER_AUTH_SECRET=.*/m,
+        `BETTER_AUTH_SECRET=${betterAuthSecret}`
+      )
+      .replace(/BETTER_AUTH_URL=.*/m, `BETTER_AUTH_URL=${defaultApiUrl}`)
+      .replace(/CORS_ORIGINS=.*/m, `CORS_ORIGINS=${defaultOrigin}`);
+    await fs.writeFile(apiDevVars, devVarsContent);
+    console.log("  Created apps/api/.dev-vars from .dev-vars.example");
+  }
+  if (await exists(webEnvExample)) {
+    let webEnvContent = await fs.readFile(webEnvExample, "utf-8");
+    webEnvContent = webEnvContent
+      .replace(/VITE_API_URL=.*/m, `VITE_API_URL=${defaultApiUrl}`)
+      .replace(/VITE_APP_URL=.*/m, `VITE_APP_URL=${defaultOrigin}`);
+    await fs.writeFile(webEnv, webEnvContent);
+    console.log("  Created apps/web/.env from .env.example");
+  }
+
+  // --- Reset git and re-init (fresh history for new project)
+  const resetGit = await askSelect(
+    "Reset git and re-initialize a fresh repo?",
+    ["yes", "no"]
+  );
+  if (resetGit === "yes") {
+    const gitDir = path.join(ROOT, ".git");
+    if (await exists(gitDir)) {
+      await fs.rm(gitDir, { recursive: true });
+      console.log("  Removed .git");
+    }
+    execSync("git init", { cwd: ROOT, stdio: "inherit" });
+    console.log("  Initialized new git repo");
+  }
+
+  console.log(
+    "\nDone. Next: bun install (if you changed package names). Fill DATABASE_URL and Google OAuth in .env and apps/api/.dev-vars.\n"
+  );
 }
 
 main().catch((err) => {
