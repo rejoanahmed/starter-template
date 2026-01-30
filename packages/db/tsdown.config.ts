@@ -10,6 +10,7 @@ export default defineConfig({
   format: "esm",
   dts: true,
   outDir: "dist",
-  clean: true,
+  // Don't clean in watch so ^build output stays for api#dev to resolve
+  clean: process.env.TSDOWN_WATCH !== "1",
   unbundle: true,
 });

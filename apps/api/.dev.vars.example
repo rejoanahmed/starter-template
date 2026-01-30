@@ -1,4 +1,4 @@
-# Wrangler dev bindings. Copy to .dev.vars; setup script fills where possible.
+# Wrangler dev bindings. Copy to .dev-vars; setup script fills where possible.
 
 NODE_ENV=development
 DATABASE_URL=xxxxx

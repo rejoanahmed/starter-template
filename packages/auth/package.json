@@ -16,7 +16,7 @@
   },
   "scripts": {
     "build": "tsdown",
-    "dev": "tsdown --watch",
+    "dev": "TSDOWN_WATCH=1 tsdown --watch",
     "type-check": "tsc -b"
   },
   "devDependencies": {

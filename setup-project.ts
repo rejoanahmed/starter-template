@@ -314,9 +314,9 @@ async function main() {
     console.log("  Updated .syncpackrc.json");
   }
 
-  // --- Env files: copy examples to .env / .dev-vars and set defaults
-  const apiDevVarsExample = path.join(ROOT, "apps", "api", ".dev-vars.example");
-  const apiDevVars = path.join(ROOT, "apps", "api", ".dev-vars");
+  // --- Env files: copy examples to .env / .dev.vars and set defaults
+  const apiDevVarsExample = path.join(ROOT, "apps", "api", ".dev.vars.example");
+  const apiDevVars = path.join(ROOT, "apps", "api", ".dev.vars");
   const webEnvExample = path.join(ROOT, "apps", "web", ".env.example");
   const webEnv = path.join(ROOT, "apps", "web", ".env");
 
@@ -336,7 +336,7 @@ async function main() {
       .replace(/BETTER_AUTH_URL=.*/m, `BETTER_AUTH_URL=${defaultApiUrl}`)
       .replace(/CORS_ORIGINS=.*/m, `CORS_ORIGINS=${defaultOrigin}`);
     await fs.writeFile(apiDevVars, devVarsContent);
-    console.log("  Created apps/api/.dev-vars from .dev-vars.example");
+    console.log("  Created apps/api/.dev.vars from .dev.vars.example");
   }
   if (await exists(webEnvExample)) {
     let webEnvContent = await fs.readFile(webEnvExample, "utf-8");
@@ -363,7 +363,7 @@ async function main() {
   }
 
   console.log(
-    "\nDone. Next: bun install (if you changed package names). Fill DATABASE_URL and Google OAuth in .env and apps/api/.dev-vars.\n"
+    "\nDone. Next: bun install (if you changed package names). Fill DATABASE_URL and Google OAuth in .env and apps/api/.dev.vars.\n"
   );
 }
 
