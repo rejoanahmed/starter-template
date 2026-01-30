@@ -9,6 +9,7 @@
     ]
   },
   "scripts": {
+    "setup": "bun run setup-project.ts",
     "dev": "turbo dev",
     "build": "turbo build",
     "check": "ultracite check && bun run syncpack:check && bun run check-types",
