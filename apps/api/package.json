@@ -2,6 +2,7 @@
   "name": "api",
   "version": "1.0.0",
   "private": true,
+  "type": "module",
   "types": "./dist/export-types.d.mts",
   "exports": {
     ".": {
@@ -11,7 +12,7 @@
     }
   },
   "scripts": {
-    "dev": "bunx wrangler dev --port 3001 --ip 0.0.0.0",
+    "dev": "concurrently \"tsdown --watch\" \"bunx wrangler dev --port 3001 --ip 0.0.0.0\"",
     "test": "vitest run",
     "build": "tsdown",
     "deploy": "bunx wrangler deploy --minify",
@@ -40,6 +41,7 @@
     "zod": "^4.3.6"
   },
   "devDependencies": {
+    "concurrently": "^9.1.2",
     "tsdown": "^0.20.1",
     "vitest": "^4.0.18",
     "@cloudflare/workers-types": "^4.20260129.0",

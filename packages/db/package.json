@@ -1,32 +1,12 @@
 {
   "name": "@starter/db",
-  "type": "module",
-  "types": "./dist/index.d.mts",
   "exports": {
-    ".": {
-      "types": "./dist/index.d.mts",
-      "import": "./dist/index.mjs",
-      "default": "./dist/index.mjs"
-    },
-    "./schema": {
-      "types": "./dist/schema/index.d.mts",
-      "import": "./dist/schema/index.mjs",
-      "default": "./dist/schema/index.mjs"
-    },
-    "./schema/auth": {
-      "types": "./dist/schema/auth.d.mts",
-      "import": "./dist/schema/auth.mjs",
-      "default": "./dist/schema/auth.mjs"
-    },
-    "./schema/issue": {
-      "types": "./dist/schema/issue.d.mts",
-      "import": "./dist/schema/issue.mjs",
-      "default": "./dist/schema/issue.mjs"
-    }
+    ".": "./src/index.ts",
+    "./schema": "./src/schema/index.ts",
+    "./schema/auth": "./src/schema/auth.ts",
+    "./schema/issue": "./src/schema/issue.ts"
   },
   "scripts": {
-    "build": "tsdown",
-    "dev": "TSDOWN_WATCH=1 tsdown --watch",
     "type-check": "tsc -b",
     "db:push": "drizzle-kit push",
     "db:studio": "drizzle-kit studio",
@@ -36,8 +16,7 @@
   "devDependencies": {
     "drizzle-kit": "0.31.8",
     "@types/ws": "8.18.1",
-    "@starter/config": "workspace:*",
-    "tsdown": "0.20.1"
+    "@starter/config": "workspace:*"
   },
   "peerDependencies": {
     "typescript": "5.9.3"

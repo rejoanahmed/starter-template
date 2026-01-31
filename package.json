@@ -10,7 +10,7 @@
   },
   "scripts": {
     "setup": "bun run setup-project.ts",
-    "dev": "turbo build --filter=./packages/db --filter=./packages/auth && turbo dev",
+    "dev": "turbo dev",
     "build": "turbo build",
     "check": "ultracite check && bun run syncpack:check && bun run check-types",
     "fix": "ultracite fix && bun run syncpack:fix",
